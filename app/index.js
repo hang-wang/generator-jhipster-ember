@@ -39,7 +39,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n' +
         '\n'));
 
-    console.log('\nWelcome to the Jhipster NG Generator\n\n');
+    console.log('\nWelcome to the Jhipster Ember Generator\n\n');
 
     var prompts = [
         {
@@ -286,6 +286,10 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'templates/application.hbs', webappDir + 'templates/application.hbs');
     this.copy(webappDir + 'templates/audit_event.hbs', webappDir + 'templates/audit_event.hbs');
     this.template(webappDir + 'templates/partials/_navigation.hbs', webappDir + 'templates/partials/navigation.hbs');
+
+    //Images
+	this.copy(webappDir + 'images/logo.png', webappDir + 'images/logo.png');
+
 
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
