@@ -61,7 +61,7 @@ following groups USER, ADMIN and ROOT (groups must be manually created)
 
 #Contributors
 
-As for this fork only not the original project
+As for this fork only, not the original project
 
 * Yëco
 
