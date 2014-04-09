@@ -16,7 +16,8 @@ import java.util.List;
 @Data
 public class User implements Resource<String> {
     private String id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private List<String> groups = new ArrayList<>();
@@ -24,20 +25,26 @@ public class User implements Resource<String> {
     public User() {
     }
 
-    public User(String username, String name, String email) {
+    public User(String username, String firstName, String lastName, String email) {
         this.id = username;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
     }
 
     public User(Account account) {
         this.id = account.getUsername();
-        this.name = account.getFullName();
+        this.firstName = account.getGivenName();
+        this.lastName = account.getSurname();
         this.email = account.getEmail();
 
         for (Group group : account.getGroups()) {
             groups.add(group.getName());
         }
+    }
+
+    public String getName() {
+        return this.firstName + " " + this.lastName;
     }
 
     @Data

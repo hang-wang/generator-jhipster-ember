@@ -160,6 +160,8 @@ JhipsterGenerator.prototype.app = function app() {
     }
     this.template('src/main/java/package/config/metrics/_JavaMailHealthCheck.java', javaDir + 'config/metrics/JavaMailHealthCheck.java');
 
+    this.template('src/main/java/package/config/data/populator/_BootstrapDataPopulator.java', javaDir + 'config/data/populator/BootstrapDataPopulator.java');
+
     removefolder(javaDir + 'config/reload')
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');

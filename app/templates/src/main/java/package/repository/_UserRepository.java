@@ -61,20 +61,21 @@ public class UserRepository implements PagingAndSortingRepository<User, String> 
         Account c = client.instantiate(Account.class);
         c.setEmail(entity.getEmail());
         c.setUsername(entity.getId());
-        c.setGivenName(entity.getName());
+        c.setGivenName(entity.getFirstName());
+        c.setSurname(entity.getLastName());
         c.setPassword(entity.getPassword());
 
         Directory directory = client.getResource(application.getDefaultAccountStore().getHref(), Directory.class);
 
         GroupList groups = directory.getGroups();
 
+        directory.createAccount(c);
+
         for (Group group : groups) {
             if (entity.getGroups().contains(group.getName())) {
                 c.addGroup(group);
             }
         }
-
-        directory.createAccount(c);
 
         return new User(c);
     }
@@ -98,7 +99,11 @@ public class UserRepository implements PagingAndSortingRepository<User, String> 
 
         Account account = findAccountByUsername(id);
 
-        return new User(account);
+        if (account == null) {
+            return null;
+        } else {
+            return new User(account);
+        }
     }
 
     @Override
