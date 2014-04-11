@@ -38,19 +38,19 @@
           {
               type: 'input',
               name: 'baseName',
-              message: '(1/4) What is the base name of your application?',
+              message: '(1/5) What is the base name of your application?',
               default: 'jhipster-ember'
           },
           {
               type: 'input',
               name: 'packageName',
-              message: '(2/4) What is your default Java package name?',
+              message: '(2/5) What is your default Java package name?',
               default: 'com.mycompany.myapp'
           },
           {
               type: 'list',
               name: 'storage',
-              message: '(3/4) What is your application storage engine?',
+              message: '(3/5) What is your application storage engine?',
               choices: [
                   {
                       value: 'postgres',
@@ -66,7 +66,23 @@
           {
               type: 'list',
               name: 'apiOnly',
-              message: '(4/4) Create API only application (no UI)?',
+              message: '(4/5) Create API only application (no UI)?',
+              choices: [
+                  {
+                      value: 'yes',
+                      name: 'Yes'
+                  },
+                  {
+                      value: 'no',
+                      name: 'no'
+                  }
+              ],
+              default: 1
+          },
+          {
+              type: 'list',
+              name: 'stormpath',
+              message: '(5/5) Use Stormpath as authentication provider?',
               choices: [
                   {
                       value: 'yes',
@@ -86,6 +102,7 @@
           this.baseName = props.baseName;
           this.storage = props.storage;
           this.apiOnly = props.apiOnly;
+          this.stormpath = props.stormpath;
           cb();
       }.bind(this));
   };
@@ -122,7 +139,7 @@
       this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml');
 
       if(this.storage == 'postgres') {
-        this.copy(resourceDir + '/config/liquibase/db-changelog.xml', resourceDir + 'config/liquibase/db-changelog.xml');
+        this.template(resourceDir + '/config/liquibase/_db-changelog.xml', resourceDir + 'config/liquibase/db-changelog.xml');
       } else {
         removefolder(resourceDir + 'config/liquibase')
       }
@@ -150,7 +167,11 @@
       this.template('src/main/java/package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java');
       this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java');
       this.template('src/main/java/package/config/_OAuth2ServerConfig.java', javaDir + 'config/OAuth2ServerConfig.java');
-      this.template('src/main/java/package/config/_StormpathConfiguration.java', javaDir + 'config/StormpathConfiguration.java');
+      if(this.stormpath == 'yes') {
+        this.template('src/main/java/package/config/_StormpathConfiguration.java', javaDir + 'config/StormpathConfiguration.java');
+      } else {
+        removefile(javaDir + 'config/StormpathConfiguration.java');
+      }
 
       this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java');
       this.template('src/main/java/package/config/audit/_AuditConfiguration.java', javaDir + 'config/audit/AuditConfiguration.java');
@@ -163,7 +184,11 @@
       }
       this.template('src/main/java/package/config/metrics/_JavaMailHealthCheck.java', javaDir + 'config/metrics/JavaMailHealthCheck.java');
 
-      this.template('src/main/java/package/config/data/populator/_BootstrapDataPopulator.java', javaDir + 'config/data/populator/BootstrapDataPopulator.java');
+      if(this.stormpath == 'yes') {
+        this.template('src/main/java/package/config/data/populator/_BootstrapDataPopulator-stormpath.java', javaDir + 'config/data/populator/BootstrapDataPopulator.java');
+      } else {
+        this.template('src/main/java/package/config/data/populator/_BootstrapDataPopulator.java', javaDir + 'config/data/populator/BootstrapDataPopulator.java');
+      }
 
       removefolder(javaDir + 'config/reload')
 
@@ -182,7 +207,15 @@
         this.template('src/main/java/package/domain/util/_ObjectIdSerializer.java', javaDir + 'domain/util/ObjectIdSerializer.java');
       }
 
-      this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
+      if(this.stormpath == 'yes') {
+        this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
+      } else {
+        if(this.storage == 'postgres') {
+          this.template('src/main/java/package/domain/_User-jpa.java', javaDir + 'domain/User.java');
+        } else {
+          this.template('src/main/java/package/domain/_User-mongo.java', javaDir + 'domain/User.java');
+        }
+      }
       this.template('src/main/java/package/domain/_Resource.java', javaDir + 'domain/Resource.java');
       this.template('src/main/java/package/domain/_Logger.java', javaDir + 'domain/Logger.java');
       this.template('src/main/java/package/domain/util/_CustomPage.java', javaDir + 'domain/util/CustomPage.java');
@@ -201,7 +234,16 @@
       } else {
         this.template('src/main/java/package/repository/_PersistenceAuditEventRepository-mongo.java', javaDir + 'repository/PersistenceAuditEventRepository.java');
       }
-      this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java');
+
+      if(this.stormpath == 'yes') {
+        this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java');
+      } else {
+        if(this.storage == 'postgres') {
+          this.template('src/main/java/package/repository/_UserRepository-jpa.java', javaDir + 'repository/UserRepository.java');
+        } else {
+          this.template('src/main/java/package/repository/_UserRepository-mongo.java', javaDir + 'repository/UserRepository.java');
+        }
+      }
       this.template('src/main/java/package/repository/_LoggerRepository.java', javaDir + 'repository/LoggerRepository.java');
 
       this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java');
@@ -210,6 +252,9 @@
       this.template('src/main/java/package/security/_UserApprovalHandler.java', javaDir + 'security/UserApprovalHandler.java');
       this.template('src/main/java/package/security/_OAuth2ExceptionMixin.java', javaDir + 'security/OAuth2ExceptionMixin.java');
       this.template('src/main/java/package/security/_OAuth2ExceptionSerializer.java', javaDir + 'security/OAuth2ExceptionSerializer.java');
+      if(this.stormpath === 'no') {
+        this.template('src/main/java/package/security/_UserDetailsAuthenticationProvider.java', javaDir + 'security/UserDetailsAuthenticationProvider.java');
+      }
 
       this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java');
       this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java');
@@ -225,7 +270,17 @@
         this.template('src/main/java/package/web/rest/_AuditEventsResource-mongo.java', javaDir + 'web/rest/AuditEventsResource.java');
       }
       this.template('src/main/java/package/web/rest/_LoggersResource.java', javaDir + 'web/rest/LoggersResource.java');
-      this.template('src/main/java/package/web/rest/_UsersResource.java', javaDir + 'web/rest/UsersResource.java');
+
+      if(this.stormpath == 'yes') {
+        this.template('src/main/java/package/web/rest/_UsersResource.java', javaDir + 'web/rest/UsersResource.java');
+      } else {
+        if(this.storage == 'postgres') {
+          this.template('src/main/java/package/web/rest/_UsersResource-jpa.java', javaDir + 'web/rest/UsersResource.java');
+        } else {
+          this.template('src/main/java/package/web/rest/_UsersResource-mongo.java', javaDir + 'web/rest/UsersResource.java');
+        }
+      }
+
       this.template('src/main/java/package/web/rest/_AbstractRestResource.java', javaDir + 'web/rest/AbstractRestResource.java');
       this.template('src/main/java/package/web/rest/_EntityNotFoundException.java', javaDir + 'web/rest/EntityNotFoundException.java');
       this.template('src/main/java/package/web/rest/_RestError.java', javaDir + 'web/rest/RestError.java');
@@ -295,7 +350,8 @@
       this.config.set('packageName', this.packageName);
       this.config.set('storage', this.storage);
       this.config.set('packageFolder', packageFolder);
-      this.config.set('apiOnly', this.apiOnly)
+      this.config.set('apiOnly', this.apiOnly);
+      this.config.set('stormpath', this.stormpath);
   };
 
   function removefile(file) {

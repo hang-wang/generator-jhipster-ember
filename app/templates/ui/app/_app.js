@@ -11,12 +11,12 @@ Ember.Application.initializer({
 
         Ember.SimpleAuth.Session.reopen({
             currentUser: function() {
-                var username = this.get('username');
+                var id = this.get('id');
 
-                if (!Ember.isEmpty(username)) {
-                    return container.lookup('store:main').find('user', username);
+                if (!Ember.isEmpty(id)) {
+                    return container.lookup('store:main').find('user', id);
                 }
-            }.property('username')
+            }.property('id')
         });
 
         container.register('authenticators:custom', App.CustomAuthenticator);
@@ -54,6 +54,7 @@ App.CustomAuthenticator = Ember.SimpleAuth.Authenticators.OAuth2.extend({
             }).then(function (response) {
                 Ember.run(function () {
                     resolve({
+                        id: response.id,
                         access_token: response.access_token,
                         username: response.username,
                         roles: response.roles
