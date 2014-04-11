@@ -35,6 +35,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':ui')
     compile("com.codahale.metrics:metrics-graphite:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")
     compile("com.codahale.metrics:metrics-jvm:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")
     compile("com.codahale.metrics:metrics-servlet:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")

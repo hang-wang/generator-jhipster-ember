@@ -5,30 +5,6 @@
         "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
 
 <urlrewrite>
-    <rule>
-        <from>^/$</from>
-        <to>/dist/index.html</to>
-    </rule>
-    <rule>
-        <from>^/index.html$</from>
-        <to>/dist/index.html</to>
-    </rule>
-    <rule>
-        <from>^/images/(.*)$</from>
-        <to>/dist/images/$1</to>
-    </rule>
-    <rule>
-        <from>^/fonts/(.*)$</from>
-        <to>/dist/fonts/$1</to>
-    </rule>
-    <rule>
-        <from>^/scripts/(.*)$</from>
-        <to>/dist/scripts/$1</to>
-    </rule>
-    <rule>
-        <from>^/styles/(.*)$</from>
-        <to>/dist/styles/$1</to>
-    </rule>
     <!-- Force HTTPS prod only -->
     <!--
     <rule match-type="regex">

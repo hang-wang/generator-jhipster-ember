@@ -1,1 +1,3 @@
 rootProject.name = '<%= _.slugify(baseName) %>'
+
+include 'ui'

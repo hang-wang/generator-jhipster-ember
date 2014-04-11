@@ -216,6 +216,60 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/servlet/_package-info.java', javaDir + 'web/servlet/package-info.java');
     this.template('src/main/java/package/web/servlet/_HealthCheckServlet.java', javaDir + 'web/servlet/HealthCheckServlet.java');
 
+    // Create UI files
+    var uiDir = 'ui/';
+    this.mkdir(uiDir);
+    //Root UI Files
+    this.copy(uiDir + 'build.gradle', uiDir + 'build.gradle');
+    this.copy(uiDir + 'bowerrc', uiDir + '.bowerrc');
+    this.copy(uiDir + 'gitignore', uiDir + '.gitignore');
+    this.copy(uiDir + 'jshintrc', uiDir + '.jshintrc');
+
+    this.template(uiDir + '_Brocfile.js', uiDir + 'Brocfile.js');
+    this.template(uiDir + '_bower.json', uiDir + 'bower.json');
+    this.template(uiDir + '_package.json', uiDir + 'package.json');
+    //Vendor folder UI files
+    this.copy(uiDir + 'vendor/_loader.js', uiDir + 'vendor/_loader.js');
+    this.copy(uiDir + 'vendor/ember-shim.js', uiDir + 'vendor/ember-shim.js');
+    this.copy(uiDir + 'vendor/qunit-shim.js', uiDir + 'vendor/qunit-shim.js');
+    //Tests folder UI files
+    this.copy(uiDir + 'tests/jshintrc', uiDir + 'tests/jshintrc');
+    this.copy(uiDir + 'tests/test-helper.js', uiDir + 'tests/test-helper.js');
+    this.copy(uiDir + 'tests/test-loader.js', uiDir + 'tests/test-loader.js');
+    this.template(uiDir + 'tests/_index.html', uiDir + 'tests/index.html');
+    this.copy(uiDir + 'tests/unit/.gitkeep', uiDir + 'tests/unit/.gitkeep');
+    this.template(uiDir + 'tests/helpers/_resolver.js', uiDir + 'tests/helpers/resolver.js');
+    this.template(uiDir + 'tests/helpers/_start-app.js', uiDir + 'tests/helpers/start-app.js');
+    //Public folder UI files
+    this.directory(uiDir + 'public/fonts', uiDir + 'public/fonts');
+    this.copy(uiDir + 'public/images/logo.png', uiDir + 'public/images/logo.png');
+    //Config folder UI files
+    this.copy(uiDir + 'config/environment.js', uiDir + 'config/environment.js');
+    //App folder UI fils
+    this.copy(uiDir + 'app/main.js', uiDir + 'app/main.js');
+    this.copy(uiDir + 'app/router.js', uiDir + 'app/router.js');
+    this.template(uiDir + 'app/_index.html', uiDir + 'app/index.html');
+    this.template(uiDir + 'app/_app.js', uiDir + 'app/app.js');
+    this.copy(uiDir + 'app/views/.gitkeep', uiDir + 'app/views/.gitkeep');
+    this.copy(uiDir + 'app/utils/.gitkeep', uiDir + 'app/utils/.gitkeep');
+    this.template(uiDir + 'app/templates/_navigation.hbs', uiDir + 'app/templates/navigation.hbs');
+    this.copy(uiDir + 'app/templates/application.hbs', uiDir + 'app/templates/application.hbs');
+    this.copy(uiDir + 'app/templates/audit_event.hbs', uiDir + 'app/templates/audit_event.hbs');
+    this.copy(uiDir + 'app/templates/index.hbs', uiDir + 'app/templates/index.hbs');
+    this.copy(uiDir + 'app/templates/login.hbs', uiDir + 'app/templates/login.hbs');
+    this.copy(uiDir + 'app/templates/logs_config.hbs', uiDir + 'app/templates/logs_config.hbs');
+    this.directory(uiDir + 'app/styles', uiDir + 'app/styles');
+    this.directory(uiDir + 'app/routes', uiDir + 'app/routes');
+    this.directory(uiDir + 'app/models', uiDir + 'app/models');
+    this.directory(uiDir + 'app/mixins', uiDir + 'app/mixins');
+    this.directory(uiDir + 'app/initializers', uiDir + 'app/initializers');
+    this.directory(uiDir + 'app/helpers', uiDir + 'app/helpers');
+    this.directory(uiDir + 'app/controllers', uiDir + 'app/controllers');
+    this.directory(uiDir + 'app/components', uiDir + 'app/components');
+    this.directory(uiDir + 'app/adapters', uiDir + 'app/adapters');
+    //api-stub filder UI files
+    this.directory(uiDir + 'api-stub', uiDir + 'api-stub');
+
     this.config.set('baseName', this.baseName);
     this.config.set('packageName', this.packageName);
     this.config.set('storage', this.storage);
