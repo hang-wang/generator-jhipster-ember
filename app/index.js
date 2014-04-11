@@ -10,14 +10,7 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
     yeoman.generators.Base.apply(this, arguments);
 
     this.on('end', function () {
-        this.installDependencies({
-            skipInstall: options['skip-install'],
-            callback: function() {
-              this.spawnCommand('grunt', ['build']).on('exit', function() {
-                this.spawnCommand('gradle', ['wrapper', 'idea', 'clean', 'build']);
-              }.bind(this));
-            }.bind(this)
-        });
+      this.spawnCommand('gradle', ['wrapper', 'idea', 'clean', 'build']);
     });
     this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
@@ -81,18 +74,11 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 };
 
 JhipsterGenerator.prototype.app = function app() {
-
-    this.template('_package.json', 'package.json');
-    this.template('_bower.json', 'bower.json');
     this.template('_README.md', 'README.md');
-    this.template('bowerrc', '.bowerrc');
-    this.copy('Gruntfile.js', 'Gruntfile.js');
     this.copy('gitignore', '.gitignore');
     removefolder('spring_loaded');
     this.copy('system.properties', 'system.properties');
     this.copy('Procfile', 'Procfile');
-    this.copy('VERSION', 'VERSION');
-    this.copy('build.sh', 'build.sh');
     this.copy('gradle.properties', 'gradle.properties');
 
     var packageFolder = this.packageName.replace(/\./g, '/');
@@ -230,84 +216,10 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/servlet/_package-info.java', javaDir + 'web/servlet/package-info.java');
     this.template('src/main/java/package/web/servlet/_HealthCheckServlet.java', javaDir + 'web/servlet/HealthCheckServlet.java');
 
-    // Create Test Java files
-    var testDir = 'src/test/java/' + packageFolder + '/';
-    var testResourceDir = 'src/test/resources/';
-    this.mkdir(testDir);
-
-    //this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml');
-    //this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
-
-    // Create Webapp
-    var webappDir = 'src/main/resources/public/';
-    this.mkdir(webappDir);
-
-    this.copy(webappDir + 'styles/main.less', webappDir + 'styles/main.less');
-    this.copy(webappDir + 'styles/login.less', webappDir + 'styles/login.less');
-    this.copy(webappDir + 'fonts/glyphicons-halflings-regular.eot', webappDir + 'fonts/glyphicons-halflings-regular.eot');
-    this.copy(webappDir + 'fonts/glyphicons-halflings-regular.svg', webappDir + 'fonts/glyphicons-halflings-regular.svg');
-    this.copy(webappDir + 'fonts/glyphicons-halflings-regular.ttf', webappDir + 'fonts/glyphicons-halflings-regular.ttf');
-    this.copy(webappDir + 'fonts/glyphicons-halflings-regular.woff', webappDir + 'fonts/glyphicons-halflings-regular.woff');
-
-    // HTML5 BoilerPlate
-    this.copy(webappDir + 'favicon.ico', webappDir + 'favicon.ico');
-    this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
-    this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
-
-    // i18n
-    this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
-    this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
-    this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
-
-    // Index page
-    this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
-    this.indexFile = this.engine(this.indexFile, this);
-
-    // JavaScript
-    this.template(webappDir + 'scripts/_app.js', webappDir + 'scripts/app.js');
-    this.template(webappDir + 'scripts/_router.js', webappDir + 'scripts/router.js');
-    this.template(webappDir + 'scripts/_store.js', webappDir + 'scripts/store.js');
-    this.template(webappDir + 'scripts/_auth.js', webappDir + 'scripts/auth.js');
-    this.copy(webappDir + 'scripts/helpers.js', webappDir + 'scripts/helpers.js');
-
-    this.template(webappDir + 'scripts/controllers/_login_controller.js', webappDir + 'scripts/controllers/login_controller.js');
-    this.template(webappDir + 'scripts/controllers/_audit_event_controller.js', webappDir + 'scripts/controllers/audit_event_controller.js');
-    this.template(webappDir + 'scripts/controllers/_logs_config_controller.js', webappDir + 'scripts/controllers/logs_config_controller.js');
-    this.template(webappDir + 'scripts/controllers/_application_controller.js', webappDir + 'scripts/controllers/application_controller.js');
-    this.template(webappDir + 'scripts/models/_user_model.js', webappDir + 'scripts/models/user_model.js');
-    this.template(webappDir + 'scripts/models/_audit_event_model.js', webappDir + 'scripts/models/audit_event_model.js');
-    this.template(webappDir + 'scripts/models/_logger_model.js', webappDir + 'scripts/models/logger_model.js');
-    this.template(webappDir + 'scripts/routes/_application_route.js', webappDir + 'scripts/routes/application_route.js');
-    this.template(webappDir + 'scripts/routes/_index_route.js', webappDir + 'scripts/routes/index_route.js');
-    this.template(webappDir + 'scripts/routes/_logs_config_route.js', webappDir + 'scripts/routes/logs_config_route.js');
-    this.template(webappDir + 'scripts/routes/_audit_event_route.js', webappDir + 'scripts/routes/audit_event_route.js');
-
-    this.copy(webappDir + 'templates/index.hbs', webappDir + 'templates/index.hbs');
-    this.copy(webappDir + 'templates/login.hbs', webappDir + 'templates/login.hbs');
-    this.copy(webappDir + 'templates/logs_config.hbs', webappDir + 'templates/logs_config.hbs');
-    this.copy(webappDir + 'templates/application.hbs', webappDir + 'templates/application.hbs');
-    this.copy(webappDir + 'templates/audit_event.hbs', webappDir + 'templates/audit_event.hbs');
-    this.template(webappDir + 'templates/partials/_navigation.hbs', webappDir + 'templates/partials/navigation.hbs');
-
-    //Images
-	this.copy(webappDir + 'images/logo.png', webappDir + 'images/logo.png');
-
-
-    // Create Test Javascript files
-    var testJsDir = 'src/test/javascript/';
-    this.mkdir(testJsDir);
-
-    this.write(webappDir + 'index.html', this.indexFile);
-
     this.config.set('baseName', this.baseName);
     this.config.set('packageName', this.packageName);
     this.config.set('storage', this.storage);
     this.config.set('packageFolder', packageFolder);
-};
-
-JhipsterGenerator.prototype.projectfiles = function projectfiles() {
-    this.copy('editorconfig', '.editorconfig');
-    this.copy('jshintrc', '.jshintrc');
 };
 
 function removefile(file) {
