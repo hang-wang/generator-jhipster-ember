@@ -1,1 +1,3 @@
 rootProject.name = '<%= _.slugify(baseName) %>'
+<% if (apiOnly == 'no') { %>
+include 'ui'<% } %>

@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("com.moowork.gradle:gradle-node-plugin:0.5")
+    }
+}
+
+apply plugin: "java"
+apply plugin: "node"
+
+node {
+    version = "0.10.26"
+
+    download = true
+}
+
+jar.dependsOn << 'emberBuild'
+clean.dependsOn << 'cleanEmberBuild'
+
+jar {
+    from(fileTree("dist")) {
+        into "META-INF/resources"
+    }
+}
+
+task bowerInstall(type: NodeTask, dependsOn: "npmInstall") {
+    script = file("node_modules/bower/bin/bower")
+    args = ["install"]
+}
+
+task emberBuild(type: NodeTask, dependsOn: "bowerInstall") {
+    script = file("node_modules/ember-cli/bin/ember")
+    args = ["build", "production"]
+}
+
+task emberServer(type: NodeTask, dependsOn: "bowerInstall") {
+    script = file("node_modules/ember-cli/bin/ember")
+    args = ["server", "--proxy-port", "9990"]
+}
+
+emberBuild.outputs.dir file("dist")

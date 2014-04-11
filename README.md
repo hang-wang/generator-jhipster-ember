@@ -7,7 +7,7 @@
 This fork brings the following changes or differences:
 
 * Gradle instead of Maven as build system
-* EmberJS instead of AngularJS for the frontend
+* EmberJS instead of AngularJS
 * MongoDB as an optional data storage
 * Redis as the only Cache option
 * PostgreSQL as the only SQL storage option
@@ -30,7 +30,7 @@ Install JHipster Ember:
 
 * PostgreSQL or MongoDB
 * [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* An free account in [Stormpath](http://stormpath.com) place the apiKey.properties file in ~/.config/stormpath/
+* A free account in [Stormpath](http://stormpath.com) place the apiKey.properties file in ~/.config/stormpath/
 
 #Usage
 
@@ -44,19 +44,18 @@ To run the generated application
 
 ```> ./gradlew bootRun```
 
-On a different terminal session
+On a different terminal session run the UI with livereload and all the good stuff (provided by [ember-cli](https://github.com/stefanpenner/ember-cli))
 
-```> grunt serve```
+```> ./gradlew emberServer```
 
-Once the app boots up, you should be able to see a new app register in your
-Stormpath account, go ahead and create new root account for your app with the
-following groups USER, ADMIN and ROOT (groups must be manually created)
+Yes a full gradle workflow!!
+
+Goto http://localhost:4200/ login with marisssa@koala.test/123Queso@
 
 #TODO
 
 * Add option for a manage authentication manager instead of using Stormpath
-* Bootstrap root user creation on boot on dev mode
-* Add simple user registration and management UI/REST Endpoints
+* Add simple user registration and user management UI/REST Endpoints
 * Change the name (maybe)
 
 #Contributors
