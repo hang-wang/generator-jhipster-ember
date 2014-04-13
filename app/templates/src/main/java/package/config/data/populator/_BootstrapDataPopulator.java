@@ -5,7 +5,7 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;<% if (storage == 'postgresql') { %>
+import org.springframework.beans.factory.annotation.Autowired;<% if (storage == 'postgres') { %>
 import org.springframework.context.annotation.DependsOn;<% } %>
 import org.springframework.stereotype.Component;
 

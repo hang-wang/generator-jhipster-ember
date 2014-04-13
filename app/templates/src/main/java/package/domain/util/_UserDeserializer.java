@@ -6,12 +6,13 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.UserRepository;<% if (storage == 'mongo' && stormpath == 'no') { %>
+import <%=packageName%>.repository.UserRepository;
+import org.apache.commons.lang.StringUtils;<% if (storage == 'mongo' && stormpath == 'no') { %>
 import org.bson.types.ObjectId;<% } %>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;<% if (storage == 'postgresql' && stormpath == 'no') { %>
+import java.io.IOException;<% if (storage == 'postgres' && stormpath == 'no') { %>
 import java.util.UUID;<% } %>
 
 /**
@@ -29,7 +30,7 @@ public class UserDeserializer extends JsonDeserializer<User> {
 
         User u = new User();
 
-        if (userDataNode.get("id") != null) {<% if (storage == 'postgresql' && stormpath == 'no') { %>
+        if (userDataNode.get("id") != null || StringUtils.isNotBlank(userDataNode.get("id").asText())) {<% if (storage == 'postgres' && stormpath == 'no') { %>
             u = userRepository.findOne(UUID.fromString(userDataNode.get("id").asText()));<% } %><%if (storage == 'mongo' && stormpath == 'no') { %>
             u = userRepository.findOne(new ObjectId(userDataNode.get("id").asText()));<% } %><% if (stormpath == 'yes') { %>
             u = userRepository.findOne(userDataNode.get("id").asText());<% } %>
