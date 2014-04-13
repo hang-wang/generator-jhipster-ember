@@ -2,6 +2,7 @@ package <%=packageName%>.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import <%=packageName%>.domain.util.EntityWrapper;
+import de.malkusch.validation.constraints.EqualProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Document
+@EqualProperties(value = {"password", "passwordConfirm"}, violationOnPropery = true)
 public class User extends Base implements Resource<ObjectId>, UserDetails {
     @NotBlank
     private String username;
@@ -35,7 +37,7 @@ public class User extends Base implements Resource<ObjectId>, UserDetails {
     @NotBlank
     private String email;
     @NotBlank
-    @Size(min = 6)
+    @Size(min = 8)
     @JsonIgnore
     private String password;
     @JsonIgnore

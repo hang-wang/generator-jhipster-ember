@@ -40,7 +40,7 @@ public class User extends Base implements Resource<UUID>, UserDetails {
     @NotBlank
     private String email;
     @NotBlank
-    @Size(min = 6)
+    @Size(min = 8)
     @JsonIgnore
     private String password;
     @JsonIgnore

@@ -6,12 +6,12 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.UserRepository;<% if (storage == 'mongo') { %>
+import <%=packageName%>.repository.UserRepository;<% if (storage == 'mongo' && stormpath == 'no') { %>
 import org.bson.types.ObjectId;<% } %>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;<% if (storage == 'postgresql') { %>
+import java.io.IOException;<% if (storage == 'postgresql' && stormpath == 'no') { %>
 import java.util.UUID;<% } %>
 
 /**
@@ -29,9 +29,10 @@ public class UserDeserializer extends JsonDeserializer<User> {
 
         User u = new User();
 
-        if (userDataNode.get("id") != null) {<% if (storage == 'postgresql') { %>
-            u = userRepository.findOne(UUID.fromString(userDataNode.get("id").asText()));<% } %><%if (storage == 'mongo') { %>
-            u = userRepository.findOne(new ObjectId(userDataNode.get("id").asText()));<% } %>
+        if (userDataNode.get("id") != null) {<% if (storage == 'postgresql' && stormpath == 'no') { %>
+            u = userRepository.findOne(UUID.fromString(userDataNode.get("id").asText()));<% } %><%if (storage == 'mongo' && stormpath == 'no') { %>
+            u = userRepository.findOne(new ObjectId(userDataNode.get("id").asText()));<% } %><% if (stormpath == 'yes') { %>
+            u = userRepository.findOne(userDataNode.get("id").asText());<% } %>
         }
 
         u.setEmail(userDataNode.get("email").asText());
@@ -55,8 +56,8 @@ public class UserDeserializer extends JsonDeserializer<User> {
         }
 
         if (userDataNode.get("password") != null) {
-            u.setPassword(userDataNode.get("password").asText());
-            u.setEncodePassword(true);
+            u.setPassword(userDataNode.get("password").asText());<% if (stormpath == 'no') { %>
+            u.setEncodePassword(true);<% } %>
             if (userDataNode.get("passwordConfirm") != null) {
                 u.setPasswordConfirm(userDataNode.get("passwordConfirm").asText());
             }
