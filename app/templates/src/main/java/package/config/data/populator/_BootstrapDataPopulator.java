@@ -7,15 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
  *
  */
 @Slf4j
-@Component<% if (storage == 'postgres') { %>
-@DependsOn("liquibase")<% } %>
+@Component
+@DependsOn("liquibase")
 public class BootstrapDataPopulator implements InitializingBean {
 
     private static final String ROOT_ACCOUNT_USERNAME = "marissa@koala.test";
@@ -24,8 +23,6 @@ public class BootstrapDataPopulator implements InitializingBean {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -38,7 +35,9 @@ public class BootstrapDataPopulator implements InitializingBean {
 
         if (u == null) {
             u = new User(ROOT_ACCOUNT_USERNAME, "Marissa", "Koala", ROOT_ACCOUNT_USERNAME);
-            u.setPassword(passwordEncoder.encode(ROOT_ACCOUNT_PASSWORD));
+            u.setPassword(ROOT_ACCOUNT_PASSWORD);
+            u.setPasswordConfirm(ROOT_ACCOUNT_PASSWORD);
+            u.setEncodePassword(true);
             u.setGroups(Lists.newArrayList(DEFAULT_GROUPS));
             userRepository.save(u);
         }

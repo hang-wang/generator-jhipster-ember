@@ -73,7 +73,8 @@ dependencies {<% if (apiOnly == 'no') { %>
     compile("org.projectlombok:lombok:1.12.6")
     compile("org.tuckey:urlrewritefilter:4.0.3")
     compile("org.atteo:evo-inflector:1.0.1")
-    compile("com.google.guava:guava:16.0.1")<% if (storage == 'postgres') { %>
+    compile("com.google.guava:guava:16.0.1")
+    compile("de.malkusch.validation:validation:0.2.1")<% if (storage == 'postgres') { %>
 
     // Database dependencies
     compile("org.postgresql:postgresql:9.3-1100-jdbc41")

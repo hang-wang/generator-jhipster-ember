@@ -22,7 +22,7 @@ public class OAuth2ExceptionSerializer extends StdSerializer<OAuth2Exception> {
 
     @Override
     public void serialize(OAuth2Exception value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-        RestError restError = RestError.UNAUTHORIZED_ACCESS_ERROR;
+        RestError restError = new RestError(RestError.ErrorCode.UNAUTHORIZED_ACCESS);
         restError.setStatus(value.getHttpErrorCode());
         restError.setMessage(cleanupMessage(value.getMessage()));
         jgen.writeObject(restError);

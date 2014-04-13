@@ -3,6 +3,8 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.domain.Resource;
 import <%=packageName%>.domain.util.CustomPage;
 import <%=packageName%>.domain.util.EntityWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -10,16 +12,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  *
  */
 public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Serializable, EW extends EntityWrapper<E>> {
+    @Autowired
+    private MessageSource messageSource;
+
     protected abstract Class<E> entityClass();
 
     protected abstract EW entityWrapper(E entity);
@@ -76,8 +83,11 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RestError handleException(MethodArgumentNotValidException e) {
-        RestError error = RestError.INVALID_ERROR;
-        error.setMessage(error.getMessage() + ": " + e.getBindingResult().getObjectName());
+        RestError error = new RestError(RestError.ErrorCode.INVALID);
+        error.setMessage("Invalid entity");
+        for (FieldError objectError : e.getBindingResult().getFieldErrors()) {
+            error.getDetailMessages().add(objectError.getField() + " " + messageSource.getMessage(objectError, Locale.getDefault()));
+        }
         return error;
     }
 
@@ -85,7 +95,7 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public RestError handleException(EntityNotFoundException e) {
-        RestError error = RestError.NOT_FOUND_ERROR;
+        RestError error = new RestError(RestError.ErrorCode.NOT_FOUND);
         if (e.getMessage() != null) {
             error.setMessage(e.getMessage() + " not found");
         }
@@ -96,8 +106,11 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RestError handleException(BindException e) {
-        RestError error = RestError.INVALID_ERROR;
-        error.setMessage(error.getMessage() + ": " + e.getObjectName());
+        RestError error = new RestError(RestError.ErrorCode.INVALID);
+        error.setMessage("Invalid entity");
+        for (FieldError objectError : e.getBindingResult().getFieldErrors()) {
+            error.getDetailMessages().add(objectError.getField() + " " + messageSource.getMessage(objectError, Locale.getDefault()));
+        }
         return error;
     }
 
@@ -105,7 +118,7 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
     @ExceptionHandler(UnsupportedOperationException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public RestError handleException(UnsupportedOperationException e) {
-        final RestError error = RestError.METHOD_NOT_ALLOWED_ERROR;
+        RestError error = new RestError(RestError.ErrorCode.METHOD_NOT_ALLOWED);
         error.setMessage(e.getMessage());
         return error;
     }

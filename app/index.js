@@ -193,6 +193,8 @@
       removefolder(javaDir + 'config/reload')
 
       this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
+      this.template('src/main/java/package/domain/util/_UserDeserializer.java', javaDir + 'domain/util/UserDeserializer.java');
+      this.template('src/main/java/package/domain/util/_package-info.java', javaDir + 'domain/util/package-info.java');
       if(this.storage == 'postgres') {
         this.template('src/main/java/package/domain/_Base.java', javaDir + 'domain/Base.java');
         this.template('src/main/java/package/domain/_AuditEvent.java', javaDir + 'domain/AuditEvent.java');

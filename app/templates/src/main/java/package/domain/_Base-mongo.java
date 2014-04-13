@@ -6,7 +6,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Persistable;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -15,7 +14,6 @@ import java.io.Serializable;
 @Data
 public abstract class Base implements Persistable<ObjectId>, Serializable {
     @Id
-    @NotNull
     private ObjectId id;
 
     @JsonIgnore
