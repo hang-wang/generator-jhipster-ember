@@ -6,12 +6,13 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.repository.UserRepository;<% if (storage == 'mongo') { %>
+import org.bson.types.ObjectId;<% } %>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.UUID;
+import java.io.IOException;<% if (storage == 'postgresql') { %>
+import java.util.UUID;<% } %>
 
 /**
  *
@@ -28,8 +29,9 @@ public class UserDeserializer extends JsonDeserializer<User> {
 
         User u = new User();
 
-        if (userDataNode.get("id") != null) {
-            u = userRepository.findOne(UUID.fromString(userDataNode.get("id").asText()));
+        if (userDataNode.get("id") != null) {<% if (storage == 'postgresql') { %>
+            u = userRepository.findOne(UUID.fromString(userDataNode.get("id").asText()));<% } %><%if (storage == 'mongo') { %>
+            u = userRepository.findOne(new ObjectId(userDataNode.get("id").asText()));<% } %>
         }
 
         u.setEmail(userDataNode.get("email").asText());

@@ -207,6 +207,10 @@
         this.template('src/main/java/package/domain/util/_LocalDateTimeReadConverter.java', javaDir + 'domain/util/LocalDateTimeReadConverter.java');
         this.template('src/main/java/package/domain/util/_LocalDateTimeWriteConverter.java', javaDir + 'domain/util/LocalDateTimeWriteConverter.java');
         this.template('src/main/java/package/domain/util/_ObjectIdSerializer.java', javaDir + 'domain/util/ObjectIdSerializer.java');
+
+        if(this.stormpath == 'no') {
+          this.template('src/main/java/package/domain/util/_UserPasswordEncoderListener.java', javaDir + 'domain/util/UserPasswordEncoderListener.java');
+        }
       }
 
       if(this.stormpath == 'yes') {

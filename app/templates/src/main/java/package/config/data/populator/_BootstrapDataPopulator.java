@@ -5,16 +5,16 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.beans.factory.annotation.Autowired;<% if (storage == 'postgresql') { %>
+import org.springframework.context.annotation.DependsOn;<% } %>
 import org.springframework.stereotype.Component;
 
 /**
  *
  */
 @Slf4j
-@Component
-@DependsOn("liquibase")
+@Component<% if (storage == 'postgresql') { %>
+@DependsOn("liquibase")<% } %>
 public class BootstrapDataPopulator implements InitializingBean {
 
     private static final String ROOT_ACCOUNT_USERNAME = "marissa@koala.test";
