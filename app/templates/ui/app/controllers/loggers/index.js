@@ -1,4 +1,4 @@
-var LogsConfigController = Ember.ArrayController.extend({
+var LoggersIndexController = Ember.ArrayController.extend({
     actions: {
         update: function (logger, level) {
             logger.set('level', level);
@@ -44,4 +44,4 @@ var LogsConfigController = Ember.ArrayController.extend({
     }.property('meta.lastPage')
 });
 
-export default LogsConfigController;
+export default LoggersIndexController;

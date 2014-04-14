@@ -1,4 +1,4 @@
-var AuditEventController = Ember.ArrayController.extend({
+var AuditEventsIndexController = Ember.ArrayController.extend({
     actions: {
         nextPage: function () {
             if (!this.get('isLastPage')) {
@@ -40,4 +40,4 @@ var AuditEventController = Ember.ArrayController.extend({
     }.property('meta.lastPage')
 });
 
-export default AuditEventController;
+export default AuditEventsIndexController;

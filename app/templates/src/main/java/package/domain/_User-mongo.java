@@ -49,6 +49,7 @@ public class User extends Base implements Resource<ObjectId>, UserDetails {
     private Boolean credentialsExpired = false;
     private Boolean enable = true;
     @Transient
+    @JsonIgnore
     private Boolean encodePassword = false;
 
     public User() {

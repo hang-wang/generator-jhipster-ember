@@ -1,4 +1,4 @@
-var AuditEventRoute = Ember.Route.extend(Ember.SimpleAuth.AuthenticatedRouteMixin, {
+var AuditEventsIndexRoute = Ember.Route.extend(Ember.SimpleAuth.AuthenticatedRouteMixin, {
     setupController: function (controller) {
         var self = this;
         this.get('store').find('auditEvent', {page: 0}).then(function (model) {
@@ -8,4 +8,4 @@ var AuditEventRoute = Ember.Route.extend(Ember.SimpleAuth.AuthenticatedRouteMixi
     }
 });
 
-export default AuditEventRoute;
+export default AuditEventsIndexRoute;

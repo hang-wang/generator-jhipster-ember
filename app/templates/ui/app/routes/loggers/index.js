@@ -1,4 +1,4 @@
-var LogsConfigRoute = Ember.Route.extend(Ember.SimpleAuth.AuthenticatedRouteMixin, {
+var LoggersIndexRoute = Ember.Route.extend(Ember.SimpleAuth.AuthenticatedRouteMixin, {
     setupController: function (controller) {
         var self = this;
         this.get('store').find('logger', {page: 0}).then(function (model) {
@@ -8,4 +8,4 @@ var LogsConfigRoute = Ember.Route.extend(Ember.SimpleAuth.AuthenticatedRouteMixi
     }
 });
 
-export default LogsConfigRoute;
+export default LoggersIndexRoute;

@@ -1,6 +1,6 @@
 var Router = Ember.Router.extend({
   rootURL: ENV.rootURL,
-  //location: 'history'
+  location: 'history'
 });
 
 Router.map(function() {
@@ -10,12 +10,11 @@ Router.map(function() {
     this.route('index', {
         path: '/'
     });
-    this.route('logs_config', {
-        path: '/loggers'
+    this.resource('loggers', function() {});
+    this.resource('auditEvents', function() {});
+    this.resource('users', function() {
+       this.route('new');
     });
-    this.route('audit_event'), {
-        path: '/auditEvents'
-    }
 });
 
 export default Router;

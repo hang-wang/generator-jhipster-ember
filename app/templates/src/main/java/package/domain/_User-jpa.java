@@ -55,6 +55,7 @@ public class User extends Base implements Resource<UUID>, UserDetails {
     @Column(name = "credentials_expired")
     private Boolean credentialsExpired = false;
     private Boolean enable = true;
+    @JsonIgnore
     @Transient
     private Boolean encodePassword = false;
 

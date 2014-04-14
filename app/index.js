@@ -333,10 +333,11 @@
         this.copy(uiDir + 'app/utils/.gitkeep', uiDir + 'app/utils/.gitkeep');
         this.template(uiDir + 'app/templates/_navigation.hbs', uiDir + 'app/templates/navigation.hbs');
         this.copy(uiDir + 'app/templates/application.hbs', uiDir + 'app/templates/application.hbs');
-        this.copy(uiDir + 'app/templates/audit_event.hbs', uiDir + 'app/templates/audit_event.hbs');
         this.copy(uiDir + 'app/templates/index.hbs', uiDir + 'app/templates/index.hbs');
         this.copy(uiDir + 'app/templates/login.hbs', uiDir + 'app/templates/login.hbs');
-        this.copy(uiDir + 'app/templates/logs_config.hbs', uiDir + 'app/templates/logs_config.hbs');
+        this.directory(uiDir + 'app/templates/loggers', uiDir + 'app/templates/loggers');
+        this.directory(uiDir + 'app/templates/audit-events', uiDir + 'app/templates/audit-events');
+        this.directory(uiDir + 'app/templates/users', uiDir + 'app/templates/users');
         this.directory(uiDir + 'app/styles', uiDir + 'app/styles');
         this.directory(uiDir + 'app/routes', uiDir + 'app/routes');
         this.directory(uiDir + 'app/models', uiDir + 'app/models');

@@ -1,0 +1,43 @@
+<div>
+    <h2>Users</h2>
+</div>
+
+<table class="table table-condensed table-striped table-bordered table-responsive">
+    <thead>
+    <tr title="click to order">
+        <th>Id</th>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each}}
+        <tr>
+            <td>
+                {{id}}
+            </td>
+            <td>
+                {{username}}
+            </td>
+            <td>
+                {{name}}
+            </td>
+            <td>
+              {{#if enable}}
+                <span class="label label-success">Enable</span>
+              {{else}}
+                <span class="label label-danger">Disable</span>
+              {{/if}}
+            </td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+<div class="text-center">
+    <ul class="pager">
+        <li {{bind-attr class="isFirstPage:disabled"}}><a href="#" {{action 'previousPage'}}>&larr; Previous</a></li>
+        <li>{{currentPage}} of {{totalPages}}</li>
+        <li {{bind-attr class="isLastPage:disabled"}}><a href="#" {{action 'nextPage'}}>Next &rarr;</a></li>
+    </ul>
+</div>
