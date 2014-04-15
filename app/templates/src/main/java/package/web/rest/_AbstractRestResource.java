@@ -86,7 +86,7 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
         RestError error = new RestError(RestError.ErrorCode.INVALID);
         error.setMessage("Invalid entity");
         for (FieldError objectError : e.getBindingResult().getFieldErrors()) {
-            error.getDetailMessages().add(objectError.getField() + " " + messageSource.getMessage(objectError, Locale.getDefault()));
+            error.getDetailMessages().add(messageSource.getMessage(objectError, Locale.getDefault()));
         }
         return error;
     }
@@ -109,7 +109,7 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
         RestError error = new RestError(RestError.ErrorCode.INVALID);
         error.setMessage("Invalid entity");
         for (FieldError objectError : e.getBindingResult().getFieldErrors()) {
-            error.getDetailMessages().add(objectError.getField() + " " + messageSource.getMessage(objectError, Locale.getDefault()));
+            error.getDetailMessages().add(messageSource.getMessage(objectError, Locale.getDefault()));
         }
         return error;
     }

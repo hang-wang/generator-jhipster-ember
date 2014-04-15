@@ -344,9 +344,16 @@
         this.directory(uiDir + 'app/mixins', uiDir + 'app/mixins');
         this.directory(uiDir + 'app/initializers', uiDir + 'app/initializers');
         this.directory(uiDir + 'app/helpers', uiDir + 'app/helpers');
-        this.directory(uiDir + 'app/controllers', uiDir + 'app/controllers');
+        this.copy(uiDir + 'app/controllers/application.js', uiDir + 'app/controllers/application.js');
+        this.copy(uiDir + 'app/controllers/login.js', uiDir + 'app/controllers/login.js');
+        this.template(uiDir + 'app/controllers/users/_index.js', uiDir + 'app/controllers/users/index.js');
+        this.template(uiDir + 'app/controllers/users/_edit.js', uiDir + 'app/controllers/users/edit.js');
+        this.template(uiDir + 'app/controllers/users/_new.js', uiDir + 'app/controllers/users/new.js');
+        this.template(uiDir + 'app/controllers/loggers/_index.js', uiDir + 'app/controllers/loggers/index.js');
+        this.template(uiDir + 'app/controllers/audit-events/_index.js', uiDir + 'app/controllers/audit-events/index.js');
         this.directory(uiDir + 'app/components', uiDir + 'app/components');
         this.directory(uiDir + 'app/adapters', uiDir + 'app/adapters');
+        this.copy(uiDir + 'app/serializers/application.js', uiDir + 'app/serializers/application.js');
         //api-stub filder UI files
         this.directory(uiDir + 'api-stub', uiDir + 'api-stub');
       } else {

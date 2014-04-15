@@ -14,6 +14,7 @@ Router.map(function() {
     this.resource('auditEvents', function() {});
     this.resource('users', function() {
        this.route('new');
+       this.route('edit', {path: '/:id'})
     });
 });
 

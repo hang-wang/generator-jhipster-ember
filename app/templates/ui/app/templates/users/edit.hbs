@@ -1,0 +1,11 @@
+<h2>Edit user</h2>
+
+<form class="form-horizontal" role="form">
+  <fieldset>
+    {{partial "users/form"}}
+  </fieldset>
+</form>
+<div>
+  <button class="btn btn-large btn-primary" {{action 'update' this}}>Update</button>
+  <button class="btn btn-large btn-danger" {{action 'cancel' this}}>Cancel</button>
+</div>

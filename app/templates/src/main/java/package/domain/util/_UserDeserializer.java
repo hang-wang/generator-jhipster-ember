@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;<% if (storage == 'postgres' && stormpath == 'no') { %>
 import java.util.UUID;<% } %>
+import java.util.function.Function;
 
 /**
  *
@@ -30,20 +31,24 @@ public class UserDeserializer extends JsonDeserializer<User> {
 
         User u = new User();
 
-        if (userDataNode.get("id") != null || StringUtils.isNotBlank(userDataNode.get("id").asText())) {<% if (storage == 'postgres' && stormpath == 'no') { %>
+        if (userDataNode.get("id") != null && StringUtils.isNotBlank(nullCheck(userDataNode.get("id"), JsonNode::asText))) {<% if (storage == 'postgres' && stormpath == 'no') { %>
             u = userRepository.findOne(UUID.fromString(userDataNode.get("id").asText()));<% } %><%if (storage == 'mongo' && stormpath == 'no') { %>
             u = userRepository.findOne(new ObjectId(userDataNode.get("id").asText()));<% } %><% if (stormpath == 'yes') { %>
             u = userRepository.findOne(userDataNode.get("id").asText());<% } %>
         }
 
-        u.setEmail(userDataNode.get("email").asText());
-        u.setUsername(userDataNode.get("username").asText());
-        u.setFirstName(userDataNode.get("firstName").asText());
-        u.setLastName(userDataNode.get("lastName").asText());
-        u.setCredentialsExpired(userDataNode.get("credentialsExpired").asBoolean());
-        u.setEnable(userDataNode.get("enable").asBoolean());
-        u.setExpired(userDataNode.get("expired").asBoolean());
-        u.setLocked(userDataNode.get("locked").asBoolean());
+        u.setEmail(nullCheck(userDataNode.get("email"), JsonNode::asText));
+        if (userDataNode.get("username") == null) {
+            u.setUsername(u.getEmail());
+        } else {
+            u.setUsername(nullCheck(userDataNode.get("username"), JsonNode::asText));
+        }
+        u.setFirstName(nullCheck(userDataNode.get("firstName"), JsonNode::asText));
+        u.setLastName(nullCheck(userDataNode.get("lastName"), JsonNode::asText));
+        u.setCredentialsExpired(nullCheck(userDataNode.get("credentialsExpired"), JsonNode::asBoolean));
+        u.setEnable(nullCheck(userDataNode.get("enable"), JsonNode::asBoolean));
+        u.setExpired(nullCheck(userDataNode.get("expired"), JsonNode::asBoolean));
+        u.setLocked(nullCheck(userDataNode.get("locked"), JsonNode::asBoolean));
 
         JsonNode groupsArrayJsonNode = userDataNode.get("groups");
         if (groupsArrayJsonNode != null) {
@@ -56,16 +61,21 @@ public class UserDeserializer extends JsonDeserializer<User> {
             }
         }
 
-        if (userDataNode.get("password") != null) {
-            u.setPassword(userDataNode.get("password").asText());<% if (stormpath == 'no') { %>
-            u.setEncodePassword(true);<% } %>
+        String password = nullCheck(userDataNode.get("password"), JsonNode::asText);
+        if (password != null) {
+            u.setPassword(password);
+            u.setEncodePassword(true);
             if (userDataNode.get("passwordConfirm") != null) {
-                u.setPasswordConfirm(userDataNode.get("passwordConfirm").asText());
+                u.setPasswordConfirm(nullCheck(userDataNode.get("passwordConfirm"), JsonNode::asText));
             }
         } else {
             u.setPasswordConfirm(u.getPassword());
         }
 
         return u;
+    }
+
+    private <R> R nullCheck(JsonNode jsonNode, Function<JsonNode, R> function) {
+        return jsonNode.isNull() ? null : function.apply(jsonNode);
     }
 }
