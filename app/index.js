@@ -113,6 +113,7 @@
       removefolder('spring_loaded');
       this.copy('system.properties', 'system.properties');
       this.copy('Procfile', 'Procfile');
+      this.copy('newrelic.yml', 'newrelic.yml');
       this.copy('gradle.properties', 'gradle.properties');
 
       var packageFolder = this.packageName.replace(/\./g, '/');

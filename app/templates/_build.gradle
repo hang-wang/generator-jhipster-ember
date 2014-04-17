@@ -14,6 +14,10 @@ apply plugin: "idea"
 apply plugin: "java"
 apply plugin: "spring-boot"
 
+configurations {
+    newrelic
+}
+
 jar {
     baseName = "<%= _.slugify(baseName) %>"
 }
@@ -22,7 +26,13 @@ springBoot {
     backupSource = false
 }
 
-task stage(dependsOn: "assemble")
+task stage(dependsOn: ["assemble", "newrelic"])
+task newrelic(type: Copy) {
+    into "$buildDir/newrelic"
+    from(configurations.newrelic) {
+        rename 'newrelic-agent-(.*).jar', 'newrelic-agent.jar'
+    }
+}
 
 repositories {
     maven {
@@ -34,7 +44,9 @@ repositories {
     mavenCentral()
 }
 
-dependencies {<% if (apiOnly == 'no') { %>
+dependencies {
+    newrelic("com.newrelic.agent.java:newrelic-agent:3.5.1")
+<% if (apiOnly == 'no') { %>
     compile project(':ui')<% } %>
     compile("com.codahale.metrics:metrics-graphite:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")
     compile("com.codahale.metrics:metrics-jvm:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")
