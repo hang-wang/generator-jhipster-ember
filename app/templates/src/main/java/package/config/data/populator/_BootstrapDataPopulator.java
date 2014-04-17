@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Slf4j
-@Component<% if (storage == 'postgresql') { %>
+@Component<% if (storage == 'postgres') { %>
 @DependsOn("liquibase")<% } %>
 public class BootstrapDataPopulator implements InitializingBean {
 
