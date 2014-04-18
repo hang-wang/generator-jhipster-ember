@@ -108,9 +108,7 @@ public class WebConfigurer implements ServletContextInitializer {
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
 
         initMetrics(servletContext, disps);
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            initUrlRewriteProductionFilter(servletContext, disps);
-        }
+        initUrlRewriteProductionFilter(servletContext, disps);
         initCachingHttpHeadersFilter(servletContext, disps);
         initGzipFilter(servletContext, disps);
 
@@ -143,7 +141,11 @@ public class WebConfigurer implements ServletContextInitializer {
         log.debug("Registering tuckey urlrewritefilter");
 
         FilterRegistration.Dynamic urlRewriteFilter = servletContext.addFilter("urlRewriteFilter", new UrlRewriteFilter());
-        urlRewriteFilter.setInitParameter("confPath", "urlrewrite.xml");
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+            urlRewriteFilter.setInitParameter("confPath", "urlrewrite-prod.xml");
+        } else {
+            urlRewriteFilter.setInitParameter("confPath", "urlrewrite.xml");
+        }
 
         urlRewriteFilter.addMappingForUrlPatterns(disps, true, "/*");
     }

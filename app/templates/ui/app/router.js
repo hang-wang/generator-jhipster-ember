@@ -1,12 +1,10 @@
 var Router = Ember.Router.extend({
   rootURL: ENV.rootURL,
-  //location: 'history'
+  location: 'history'
 });
 
 Router.map(function() {
-    this.route('login', {
-        path: '/login'
-    });
+    this.route('login');
     this.route('index', {
         path: '/'
     });

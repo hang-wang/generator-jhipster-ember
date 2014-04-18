@@ -134,6 +134,7 @@
 
       this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml');
       this.copy(resourceDir + 'urlrewrite.xml', resourceDir + 'urlrewrite.xml');
+      this.copy(resourceDir + 'urlrewrite-prod.xml', resourceDir + 'urlrewrite-prod.xml');
 
       this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml');
       this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml');
