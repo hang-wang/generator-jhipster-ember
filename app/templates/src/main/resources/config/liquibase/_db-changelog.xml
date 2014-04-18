@@ -63,4 +63,35 @@
                                  referencedTableName="users"
                                  referencedColumnNames="id"/>
     </changeSet><% } %>
+
+    <changeSet id="3" author="jhipster">
+        <createTable tableName="oauth_client_token">
+            <column name="token_id" type="varchar(256)"/>
+            <column name="token" type="bytea"/>
+            <column name="authentication_id" type="varchar(256)"/>
+            <column name="user_name" type="varchar(256)"/>
+            <column name="client_id" type="varchar(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_access_token">
+            <column name="token_id" type="varchar(256)"/>
+            <column name="token" type="bytea"/>
+            <column name="authentication_id" type="varchar(256)"/>
+            <column name="user_name" type="varchar(256)"/>
+            <column name="client_id" type="varchar(256)"/>
+            <column name="authentication" type="bytea"/>
+            <column name="refresh_token" type="varchar(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_refresh_token">
+            <column name="token_id" type="varchar(256)"/>
+            <column name="token" type="bytea"/>
+            <column name="authentication_id" type="varchar(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_code">
+            <column name="code" type="varchar(256)"/>
+            <column name="authentication" type="bytea"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Configuration;<% if (storage == 'postgres') { %>
+import org.springframework.context.annotation.DependsOn;<% } %>
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,14 +28,14 @@ import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.error.DefaultOAuth2ExceptionRenderer;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
-import org.springframework.security.oauth2.provider.token.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.JwtTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.web.client.RestTemplate;
-
+<% if (storage == 'postgres') { %>
+import javax.sql.DataSource;<% } %>
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  *
@@ -47,14 +48,14 @@ public class OAuth2ServerConfig  {
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
         @Autowired
-        private JwtTokenServices jwtTokenServices;
+        private DefaultTokenServices tokenServices;
 
         @Autowired
         private OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
 
         @Override
         public void configure(OAuth2ResourceServerConfigurer resources) {
-            resources.resourceId(RESOURCE_ID).tokenServices(jwtTokenServices);
+            resources.resourceId(RESOURCE_ID).tokenServices(tokenServices);
         }
 
         @Override
@@ -81,9 +82,11 @@ public class OAuth2ServerConfig  {
     }
 
     @Configuration
-    @EnableAuthorizationServer
-    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
-        private TokenStore tokenStore = new InMemoryTokenStore();
+    @EnableAuthorizationServer<% if (storage == 'postgres') { %>
+    @DependsOn("liquibase")<% } %>
+    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {<% if (storage == 'postgres') { %>
+        @Autowired
+        private DataSource dataSource;<% } %>
 
         @Autowired
         private OAuth2RequestFactory requestFactory;
@@ -122,19 +125,32 @@ public class OAuth2ServerConfig  {
 
         public ApprovalStore approvalStore() throws Exception {
             TokenApprovalStore store = new TokenApprovalStore();
-            store.setTokenStore(tokenStore);
+            store.setTokenStore(tokenStore());
             return store;
         }
 
         @Bean
-        public JwtTokenServices tokenServices() {
-            final JwtTokenServices jwtTokenServices = new JwtTokenServices();
-            jwtTokenServices.setSigningKey(jwtTokenSigningKey);
-            jwtTokenServices.setVerifierKey(jwtTokenSigningKey);
-            jwtTokenServices.setTokenEnhancer(new CustomTokenEnhancer());
-            jwtTokenServices.setClientDetailsService(clientDetailsService);
-            jwtTokenServices.setSupportRefreshToken(true);
-            return jwtTokenServices;
+        public DefaultTokenServices tokenServices() {
+            final DefaultTokenServices tokenServices = new DefaultTokenServices();
+
+            TokenEnhancerChain accessTokenEnhancer = new TokenEnhancerChain();
+            accessTokenEnhancer.setTokenEnhancers(newArrayList(new CustomTokenEnhancer(), jwtTokenEnhancer()));
+            tokenServices.setTokenEnhancer(accessTokenEnhancer);
+            tokenServices.setTokenStore(tokenStore());
+            tokenServices.setClientDetailsService(clientDetailsService);
+            tokenServices.setSupportRefreshToken(true);
+
+            return tokenServices;
+        }
+
+        @Bean
+        public JwtTokenEnhancer jwtTokenEnhancer() {
+            JwtTokenEnhancer tokenEnhancer = new JwtTokenEnhancer();
+
+            tokenEnhancer.setSigningKey(jwtTokenSigningKey);
+            tokenEnhancer.setVerifierKey(jwtTokenVerificationKey);
+
+            return tokenEnhancer;
         }
 
         @Bean
@@ -163,10 +179,15 @@ public class OAuth2ServerConfig  {
             return oAuth2AuthenticationEntryPoint;
         }
 
+        @Bean
+        public TokenStore tokenStore() {
+            return new JdbcTokenStore(dataSource);
+        }
+
         @Override
         public void configure(OAuth2AuthorizationServerConfigurer oauthServer) throws Exception {
             oauthServer
-                    .tokenStore(tokenStore)
+                    .tokenStore(tokenStore())
                     .tokenService(tokenServices())
                     .userApprovalHandler(userApprovalHandler())
                     .authenticationEntryPoint(oAuth2AuthenticationEntryPoint())
