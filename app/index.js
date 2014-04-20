@@ -10,7 +10,7 @@
       yeoman.generators.Base.apply(this, arguments);
 
       this.on('end', function () {
-        this.spawnCommand('gradle', ['wrapper', 'idea', 'clean', 'build']);
+        this.spawnCommand('./gradlew', ['idea', 'clean', 'build']);
       });
       this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
   };
@@ -115,6 +115,9 @@
       this.copy('Procfile', 'Procfile');
       this.copy('newrelic.yml', 'newrelic.yml');
       this.copy('gradle.properties', 'gradle.properties');
+      this.copy('gradlew', 'gradlew');
+      this.copy('gradlew.bat', 'gradlew.bat');
+      this.directory('gradle', 'gradle');
 
       var packageFolder = this.packageName.replace(/\./g, '/');
       this.template('_build.gradle', 'build.gradle');
