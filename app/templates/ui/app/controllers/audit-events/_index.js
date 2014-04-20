@@ -1,4 +1,4 @@
-import PaginationMixin from 'jhipster_ember/mixins/pagination';
+import PaginationMixin from '<%= _.underscored(baseName) %>/mixins/pagination';
 
 var AuditEventsIndexController = Ember.ArrayController.extend(PaginationMixin, {
     modelType: 'auditEvent'
