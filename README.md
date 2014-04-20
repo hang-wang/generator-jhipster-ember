@@ -1,6 +1,6 @@
 #Jhipster Ember Generator
 
-[Yeoman](http://yeoman.io/) generator base on [JHipster](http://jhipster.github.io/) wich self describes itself as
+[Yeoman](http://yeoman.io/) generator base on [JHipster](http://jhipster.github.io/) which describes itself as
 
 > "Hipster stack for Java developers. Yeoman + Maven + Spring + AngularJS in one handy generator."
 
@@ -13,7 +13,7 @@ This fork brings the following changes or differences:
 * PostgreSQL as the only SQL storage option
 * Java 8 ready (more like Java 8 only)
 * Security via OAuth2 using Spring Security
-* [Stormpath](http://stormpath.com) as default authorization service
+* [Stormpath](http://stormpath.com) as an optional authorization service
 * Heroku deployment ready
 
 #Installation
@@ -30,6 +30,9 @@ Install JHipster Ember:
 
 * PostgreSQL or MongoDB
 * [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+
+If you want to use [Stormpath](http://stormpath.com)
+
 * A free account in [Stormpath](http://stormpath.com) place the apiKey.properties file in ~/.config/stormpath/
 
 #Usage
@@ -54,8 +57,6 @@ Goto http://localhost:4200/ login with marisssa@koala.test/123Queso@
 
 #TODO
 
-* Add option for a manage authentication manager instead of using Stormpath
-* Add simple user registration and user management UI/REST Endpoints
 * Change the name (maybe)
 
 #Contributors
