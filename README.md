@@ -1,6 +1,6 @@
 #Jhipster Ember Generator
 
-[Yeoman](http://yeoman.io/) generator base on [JHipster](http://jhipster.github.io/) wich self describes itself as
+[Yeoman](http://yeoman.io/) generator base on [JHipster](http://jhipster.github.io/) which describes itself as
 
 > "Hipster stack for Java developers. Yeoman + Maven + Spring + AngularJS in one handy generator."
 
