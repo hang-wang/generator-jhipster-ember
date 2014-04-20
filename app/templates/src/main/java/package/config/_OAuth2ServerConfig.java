@@ -1,7 +1,7 @@
 package <%=packageName%>.config;
 
-import <%=packageName%>.security.CustomTokenEnhancer;
-import <%=packageName%>.security.UserApprovalHandler;
+import <%=packageName%>.security.CustomTokenEnhancer;<% if (storage == 'mongo') { %>
+import com.mycompany.myapp.security.mongodb.MongoTokenStore;<% } %>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,13 +18,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.OAuth2ResourceServerConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.http.converter.jaxb.JaxbOAuth2ExceptionMessageConverter;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
-import org.springframework.security.oauth2.provider.approval.ApprovalStore;
-import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.error.DefaultOAuth2ExceptionRenderer;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
@@ -54,7 +52,7 @@ public class OAuth2ServerConfig  {
         private OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
 
         @Override
-        public void configure(OAuth2ResourceServerConfigurer resources) {
+        public void configure(ResourceServerSecurityConfigurer resources) {
             resources.resourceId(RESOURCE_ID).tokenServices(tokenServices);
         }
 
@@ -89,9 +87,6 @@ public class OAuth2ServerConfig  {
         private DataSource dataSource;<% } %>
 
         @Autowired
-        private OAuth2RequestFactory requestFactory;
-
-        @Autowired
         @Qualifier("authenticationManagerBean")
         private AuthenticationManager authenticationManager;
 
@@ -114,21 +109,6 @@ public class OAuth2ServerConfig  {
                     .scopes("read_write", "read", "write");
         }
 
-        public UserApprovalHandler userApprovalHandler() throws Exception {
-            UserApprovalHandler handler = new UserApprovalHandler();
-            handler.setApprovalStore(approvalStore());
-            handler.setRequestFactory(requestFactory);
-            handler.setClientDetailsService(clientDetailsService);
-            handler.setUseApprovalStore(true);
-            return handler;
-        }
-
-        public ApprovalStore approvalStore() throws Exception {
-            TokenApprovalStore store = new TokenApprovalStore();
-            store.setTokenStore(tokenStore());
-            return store;
-        }
-
         @Bean
         public DefaultTokenServices tokenServices() {
             final DefaultTokenServices tokenServices = new DefaultTokenServices();
@@ -144,8 +124,8 @@ public class OAuth2ServerConfig  {
         }
 
         @Bean
-        public JwtTokenEnhancer jwtTokenEnhancer() {
-            JwtTokenEnhancer tokenEnhancer = new JwtTokenEnhancer();
+        public JwtAccessTokenConverter jwtTokenEnhancer() {
+            JwtAccessTokenConverter tokenEnhancer = new JwtAccessTokenConverter();
 
             tokenEnhancer.setSigningKey(jwtTokenSigningKey);
             tokenEnhancer.setVerifierKey(jwtTokenVerificationKey);
@@ -180,18 +160,24 @@ public class OAuth2ServerConfig  {
         }
 
         @Bean
-        public TokenStore tokenStore() {
-            return new JdbcTokenStore(dataSource);
+        public TokenStore tokenStore() {<% if (storage == 'postgres') { %>
+            return new JdbcTokenStore(dataSource);<% } %><% if (storage == 'mongo') { %>
+            return new MongoTokenStore();<% } %>
         }
 
         @Override
-        public void configure(OAuth2AuthorizationServerConfigurer oauthServer) throws Exception {
-            oauthServer
+        public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+            endpoints
                     .tokenStore(tokenStore())
-                    .tokenService(tokenServices())
-                    .userApprovalHandler(userApprovalHandler())
+                    .tokenServices(tokenServices())
+                    .authenticationManager(authenticationManager);
+        }
+
+        @Override
+        public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+            oauthServer
                     .authenticationEntryPoint(oAuth2AuthenticationEntryPoint())
-                    .authenticationManager(authenticationManager).realm("<%=baseName%>/client");
+                    .realm("<%=baseName%>/client");
         }
     }
 }

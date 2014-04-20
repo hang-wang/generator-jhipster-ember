@@ -76,7 +76,7 @@ dependencies {
     compile("org.springframework.security:spring-security-core:3.2.3.RELEASE")
     compile("org.springframework.security:spring-security-web:3.2.3.RELEASE")
     compile("org.springframework.security:spring-security-config:3.2.3.RELEASE")
-    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.0.M4")
+    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.0.RC1")
     compile("org.springframework.security:spring-security-jwt:1.0.0.RELEASE")
     compile("org.springframework.data:spring-data-redis:1.2.0.RELEASE")
     compile("redis.clients:jedis:2.4.1")<% if (stormpath == 'yes') { %>

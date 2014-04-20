@@ -257,9 +257,19 @@
       this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java');
       this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java');
       this.template('src/main/java/package/security/_CustomTokenEnhancer.java', javaDir + 'security/CustomTokenEnhancer.java');
-      this.template('src/main/java/package/security/_UserApprovalHandler.java', javaDir + 'security/UserApprovalHandler.java');
+      removefile(javaDir + 'security/UserApprovalHandler.java');
       this.template('src/main/java/package/security/_OAuth2ExceptionMixin.java', javaDir + 'security/OAuth2ExceptionMixin.java');
       this.template('src/main/java/package/security/_OAuth2ExceptionSerializer.java', javaDir + 'security/OAuth2ExceptionSerializer.java');
+      if(this.storage == 'mongo') {
+        this.template('src/main/java/package/security/mongodb/_MongoTokenStore.java', javaDir + 'security/mongodb/MongoTokenStore.java');
+        this.template('src/main/java/package/security/mongodb/_OauthAccessToken.java', javaDir + 'security/mongodb/OauthAccessToken.java');
+        this.template('src/main/java/package/security/mongodb/_OauthAccessTokenRepository.java', javaDir + 'security/mongodb/OauthAccessTokenRepository.java');
+        this.template('src/main/java/package/security/mongodb/_OauthClientToken.java', javaDir + 'security/mongodb/OauthClientToken.java');
+        this.template('src/main/java/package/security/mongodb/_OauthCode.java', javaDir + 'security/mongodb/OauthCode.java');
+        this.template('src/main/java/package/security/mongodb/_OauthRefreshToken.java', javaDir + 'security/mongodb/OauthRefreshToken.java');
+        this.template('src/main/java/package/security/mongodb/_OauthRefreshTokenRepository.java', javaDir + 'security/mongodb/OauthRefreshTokenRepository.java');
+        this.template('src/main/java/package/security/mongodb/_package-info.java', javaDir + 'security/mongodb/package-info.java');
+      }
       if(this.stormpath === 'no') {
         this.template('src/main/java/package/security/_UserDetailsAuthenticationProvider.java', javaDir + 'security/UserDetailsAuthenticationProvider.java');
       }
