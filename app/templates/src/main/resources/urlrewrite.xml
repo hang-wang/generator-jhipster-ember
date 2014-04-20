@@ -6,29 +6,17 @@
 
 <urlrewrite>
     <rule>
-        <from>^/$</from>
-        <to>/dist/index.html</to>
+        <condition type="request-uri" operator="notequal">^/$</condition>
+        <condition type="request-uri" operator="notequal">^/api/v1/.*$</condition>
+        <condition type="request-uri" operator="notequal">^/oauth/.*$</condition>
+        <condition type="request-uri" operator="notequal">^/assets/.*$</condition>
+        <condition type="request-uri" operator="notequal">^/images/.*$</condition>
+        <condition type="request-uri" operator="notequal">^/fonts/.*$</condition>
+        <condition type="request-uri" operator="notequal">^/index.html*$</condition>
+
+        <to>/index.html</to>
     </rule>
-    <rule>
-        <from>^/index.html$</from>
-        <to>/dist/index.html</to>
-    </rule>
-    <rule>
-        <from>^/images/(.*)$</from>
-        <to>/dist/images/$1</to>
-    </rule>
-    <rule>
-        <from>^/fonts/(.*)$</from>
-        <to>/dist/fonts/$1</to>
-    </rule>
-    <rule>
-        <from>^/scripts/(.*)$</from>
-        <to>/dist/scripts/$1</to>
-    </rule>
-    <rule>
-        <from>^/styles/(.*)$</from>
-        <to>/dist/styles/$1</to>
-    </rule>
+
     <!-- Force HTTPS prod only -->
     <!--
     <rule match-type="regex">

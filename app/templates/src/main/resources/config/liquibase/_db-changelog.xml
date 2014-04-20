@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="jhipster">
+        <createTable tableName="audit_events">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="principal" type="varchar(50)"/>
+            <column name="event_date" type="timestamp"/>
+            <column name="event_type" type="varchar(50)"/>
+        </createTable>
+
+        <createTable tableName="audit_event_data">
+            <column name="audit_event_id" type="UUID"/>
+            <column name="name" type="varchar(50)"/>
+            <column name="value" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="idx_audit_event"
+                     tableName="audit_events"
+                     unique="false">
+            <column name="principal" type="varchar(50)"/>
+            <column name="event_date" type="timestamp"/>
+        </createIndex>
+
+        <createIndex indexName="idx_persistent_audit_event_data"
+                     tableName="audit_event_data"
+                     unique="false">
+            <column name="audit_event_id" type="UUID"/>
+        </createIndex>
+    </changeSet>
+<% if (stormpath == 'no') { %>
+    <changeSet id="2" author="jhipster">
+        <createTable tableName="users">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="first_name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="password" type="text"/>
+            <column name="expired" type="bool"/>
+            <column name="locked" type="bool"/>
+            <column name="credentials_expired" type="bool"/>
+            <column name="enable" type="bool"/>
+        </createTable>
+        <createTable tableName="users_groups">
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group" type="varchar(255)"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="users_groups" baseColumnNames="user_id" constraintName="users_groups_fk"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet><% } %>
+
+    <changeSet id="3" author="jhipster">
+        <createTable tableName="oauth_client_token">
+            <column name="token_id" type="varchar(256)"/>
+            <column name="token" type="bytea"/>
+            <column name="authentication_id" type="varchar(256)"/>
+            <column name="user_name" type="varchar(256)"/>
+            <column name="client_id" type="varchar(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_access_token">
+            <column name="token_id" type="varchar(256)"/>
+            <column name="token" type="bytea"/>
+            <column name="authentication_id" type="varchar(256)"/>
+            <column name="user_name" type="varchar(256)"/>
+            <column name="client_id" type="varchar(256)"/>
+            <column name="authentication" type="bytea"/>
+            <column name="refresh_token" type="varchar(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_refresh_token">
+            <column name="token_id" type="varchar(256)"/>
+            <column name="token" type="bytea"/>
+            <column name="authentication_id" type="varchar(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_code">
+            <column name="code" type="varchar(256)"/>
+            <column name="authentication" type="bytea"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

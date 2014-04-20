@@ -1,0 +1,12 @@
+<div>
+    {{bs-notifications class='notifications' showTime='5000'}}
+
+    {{#if session.isAuthenticated}}
+        {{partial "navigation"}}
+    {{/if}}
+
+    <div class="container">
+        <div {{bind-attr class="hasError:show:hide :alert :alert-danger"}}>{{error}}</div>
+        {{outlet}}
+    </div>
+</div>

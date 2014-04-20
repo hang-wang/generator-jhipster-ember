@@ -1,0 +1,50 @@
+<div>
+    <h2>Users</h2>
+</div>
+<p>
+  {{#link-to 'users.new' class="btn btn-primary"}}New User{{/link-to}}
+</p>
+<table class="table table-condensed table-striped table-bordered table-responsive">
+    <thead>
+    <tr title="click to order">
+        <th>Id</th>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each}}
+        <tr>
+            <td>
+                {{id}}
+            </td>
+            <td>
+                {{username}}
+            </td>
+            <td>
+                {{name}}
+            </td>
+            <td>
+              {{#if enable}}
+                <span class="label label-success">Enable</span>
+              {{else}}
+                <span class="label label-danger">Disable</span>
+              {{/if}}
+            </td>
+            <td>
+              <button {{action 'delete' this}} type="button" class="btn btn-danger btn-xs">Delete</button>
+              <button {{action 'edit' this}} type="button" class="btn btn-info btn-xs">Edit</button>
+            </td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+<div class="text-center">
+    <ul class="pager">
+        <li {{bind-attr class="isFirstPage:disabled"}}><a href="#" {{action 'previousPage'}}>&larr; Previous</a></li>
+        <li>{{currentPage}} of {{totalPages}}</li>
+        <li {{bind-attr class="isLastPage:disabled"}}><a href="#" {{action 'nextPage'}}>Next &rarr;</a></li>
+    </ul>
+</div>

@@ -1,12 +1,13 @@
 package <%=packageName%>.config;
 
-import <%=packageName%>.security.CustomTokenEnhancer;
-import <%=packageName%>.security.UserApprovalHandler;
+import <%=packageName%>.security.CustomTokenEnhancer;<% if (storage == 'mongo') { %>
+import com.mycompany.myapp.security.mongodb.MongoTokenStore;<% } %>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Configuration;<% if (storage == 'postgres') { %>
+import org.springframework.context.annotation.DependsOn;<% } %>
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,24 +18,22 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.OAuth2ResourceServerConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.http.converter.jaxb.JaxbOAuth2ExceptionMessageConverter;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
-import org.springframework.security.oauth2.provider.approval.ApprovalStore;
-import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.error.DefaultOAuth2ExceptionRenderer;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
-import org.springframework.security.oauth2.provider.token.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.JwtTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.web.client.RestTemplate;
-
+<% if (storage == 'postgres') { %>
+import javax.sql.DataSource;<% } %>
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  *
@@ -47,14 +46,14 @@ public class OAuth2ServerConfig  {
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
         @Autowired
-        private JwtTokenServices jwtTokenServices;
+        private DefaultTokenServices tokenServices;
 
         @Autowired
         private OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
 
         @Override
-        public void configure(OAuth2ResourceServerConfigurer resources) {
-            resources.resourceId(RESOURCE_ID).tokenServices(jwtTokenServices);
+        public void configure(ResourceServerSecurityConfigurer resources) {
+            resources.resourceId(RESOURCE_ID).tokenServices(tokenServices);
         }
 
         @Override
@@ -81,12 +80,11 @@ public class OAuth2ServerConfig  {
     }
 
     @Configuration
-    @EnableAuthorizationServer
-    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
-        private TokenStore tokenStore = new InMemoryTokenStore();
-
+    @EnableAuthorizationServer<% if (storage == 'postgres') { %>
+    @DependsOn("liquibase")<% } %>
+    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {<% if (storage == 'postgres') { %>
         @Autowired
-        private OAuth2RequestFactory requestFactory;
+        private DataSource dataSource;<% } %>
 
         @Autowired
         @Qualifier("authenticationManagerBean")
@@ -111,30 +109,28 @@ public class OAuth2ServerConfig  {
                     .scopes("read_write", "read", "write");
         }
 
-        public UserApprovalHandler userApprovalHandler() throws Exception {
-            UserApprovalHandler handler = new UserApprovalHandler();
-            handler.setApprovalStore(approvalStore());
-            handler.setRequestFactory(requestFactory);
-            handler.setClientDetailsService(clientDetailsService);
-            handler.setUseApprovalStore(true);
-            return handler;
-        }
+        @Bean
+        public DefaultTokenServices tokenServices() {
+            final DefaultTokenServices tokenServices = new DefaultTokenServices();
 
-        public ApprovalStore approvalStore() throws Exception {
-            TokenApprovalStore store = new TokenApprovalStore();
-            store.setTokenStore(tokenStore);
-            return store;
+            TokenEnhancerChain accessTokenEnhancer = new TokenEnhancerChain();
+            accessTokenEnhancer.setTokenEnhancers(newArrayList(new CustomTokenEnhancer(), jwtTokenEnhancer()));
+            tokenServices.setTokenEnhancer(accessTokenEnhancer);
+            tokenServices.setTokenStore(tokenStore());
+            tokenServices.setClientDetailsService(clientDetailsService);
+            tokenServices.setSupportRefreshToken(true);
+
+            return tokenServices;
         }
 
         @Bean
-        public JwtTokenServices tokenServices() {
-            final JwtTokenServices jwtTokenServices = new JwtTokenServices();
-            jwtTokenServices.setSigningKey(jwtTokenSigningKey);
-            jwtTokenServices.setVerifierKey(jwtTokenSigningKey);
-            jwtTokenServices.setTokenEnhancer(new CustomTokenEnhancer());
-            jwtTokenServices.setClientDetailsService(clientDetailsService);
-            jwtTokenServices.setSupportRefreshToken(true);
-            return jwtTokenServices;
+        public JwtAccessTokenConverter jwtTokenEnhancer() {
+            JwtAccessTokenConverter tokenEnhancer = new JwtAccessTokenConverter();
+
+            tokenEnhancer.setSigningKey(jwtTokenSigningKey);
+            tokenEnhancer.setVerifierKey(jwtTokenVerificationKey);
+
+            return tokenEnhancer;
         }
 
         @Bean
@@ -163,14 +159,25 @@ public class OAuth2ServerConfig  {
             return oAuth2AuthenticationEntryPoint;
         }
 
+        @Bean
+        public TokenStore tokenStore() {<% if (storage == 'postgres') { %>
+            return new JdbcTokenStore(dataSource);<% } %><% if (storage == 'mongo') { %>
+            return new MongoTokenStore();<% } %>
+        }
+
         @Override
-        public void configure(OAuth2AuthorizationServerConfigurer oauthServer) throws Exception {
+        public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+            endpoints
+                    .tokenStore(tokenStore())
+                    .tokenServices(tokenServices())
+                    .authenticationManager(authenticationManager);
+        }
+
+        @Override
+        public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
             oauthServer
-                    .tokenStore(tokenStore)
-                    .tokenService(tokenServices())
-                    .userApprovalHandler(userApprovalHandler())
                     .authenticationEntryPoint(oAuth2AuthenticationEntryPoint())
-                    .authenticationManager(authenticationManager).realm("<%=baseName%>/client");
+                    .realm("<%=baseName%>/client");
         }
     }
 }
