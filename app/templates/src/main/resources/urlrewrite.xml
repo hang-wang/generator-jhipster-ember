@@ -7,6 +7,14 @@
 <urlrewrite>
     <rule>
         <condition type="request-uri" operator="notequal">^/$</condition>
+        <condition type="request-uri" operator="notequal">^/info$</condition>
+        <condition type="request-uri" operator="notequal">^/health$</condition>
+        <condition type="request-uri" operator="notequal">^/env$</condition>
+        <condition type="request-uri" operator="notequal">^/beans$</condition>
+        <condition type="request-uri" operator="notequal">^/trace$</condition>
+        <condition type="request-uri" operator="notequal">^/dump$</condition>
+        <condition type="request-uri" operator="notequal">^/shutdown$</condition>
+        <condition type="request-uri" operator="notequal">^/metrics/.*$</condition>
         <condition type="request-uri" operator="notequal">^/api/v1/.*$</condition>
         <condition type="request-uri" operator="notequal">^/oauth/.*$</condition>
         <condition type="request-uri" operator="notequal">^/assets/.*$</condition>

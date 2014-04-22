@@ -60,7 +60,6 @@ public class OAuth2ServerConfig  {
         public void configure(HttpSecurity http) throws Exception {
             //@formatter:off
             http.authorizeRequests()
-                    .antMatchers("/health", "/info", "/index.html", "/scripts/**", "/styles/**", "/images/**").permitAll()
                     .antMatchers("/env").access("#oauth2.denyOAuthClient() and hasRole('USER,ADMIN') or #oauth2.hasScope('read')")
                     .antMatchers("/trace").access("#oauth2.denyOAuthClient() and hasRole('USER,ADMIN') or #oauth2.hasScope('read')")
                     .antMatchers("/dump").access("#oauth2.denyOAuthClient() and hasRole('USER,ADMIN') or #oauth2.hasScope('read')")
