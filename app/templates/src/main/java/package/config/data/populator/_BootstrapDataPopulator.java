@@ -32,7 +32,7 @@ public class BootstrapDataPopulator implements InitializingBean {
     }
 
     private User createRootUserAccount() {
-        return Optional.of(userRepository.findByUsername(ROOT_ACCOUNT_USERNAME))
+        return userRepository.save(Optional.of(userRepository.findByUsername(ROOT_ACCOUNT_USERNAME))
                 .orElse(new User(user -> {
                     user.setFirstName("Marissa");
                     user.setLastName("Koala");
@@ -42,7 +42,6 @@ public class BootstrapDataPopulator implements InitializingBean {
                     user.setPasswordConfirm(ROOT_ACCOUNT_PASSWORD);
                     user.setEncodePassword(true);
                     user.setGroups(Lists.newArrayList(DEFAULT_GROUPS));
-                    userRepository.save(user);
-                }));
+                })));
     }
 }

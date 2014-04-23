@@ -46,7 +46,7 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
 
     @RequestMapping(value = "/{id:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EW> findOne(@PathVariable("id") ID id) throws Exception {
-        return Optional.of(repository().findOne(id))
+        return Optional.ofNullable(repository().findOne(id))
                 .map((entity) -> new ResponseEntity<>(entityWrapper(entity), HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
