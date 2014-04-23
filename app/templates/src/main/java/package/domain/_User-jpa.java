@@ -108,6 +108,7 @@ public class User extends Base implements Resource<UUID>, UserDetails {
         if (encodePassword) {
             this.password = new BCryptPasswordEncoder().encode(this.password);
             this.passwordConfirm = this.password;
+            this.encodePassword = false;
         }
     }
 
