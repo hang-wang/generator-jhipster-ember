@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  *
@@ -45,11 +46,9 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
 
     @RequestMapping(value = "/{id:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EW> findOne(@PathVariable("id") ID id) throws Exception {
-        if (repository().exists(id)) {
-            return new ResponseEntity<>(entityWrapper(repository().findOne(id)), HttpStatus.OK);
-        } else {
-            throw new EntityNotFoundException(entityClass().getSimpleName());
-        }
+        return Optional.of(repository().findOne(id))
+                .map((entity) -> new ResponseEntity<>(entityWrapper(entity), HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -65,7 +64,7 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
             entity.setId(id);
             return new ResponseEntity<>(entityWrapper(repository().save(entity)), HttpStatus.OK);
         } else {
-            throw new EntityNotFoundException(entityClass().getSimpleName());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -75,7 +74,7 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
             repository().delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            throw new EntityNotFoundException(entityClass().getSimpleName());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -87,17 +86,6 @@ public abstract class AbstractRestResource<E extends Resource<ID>, ID extends Se
         error.setMessage("Invalid entity");
         for (FieldError objectError : e.getBindingResult().getFieldErrors()) {
             error.getDetailMessages().add(messageSource.getMessage(objectError, Locale.getDefault()));
-        }
-        return error;
-    }
-
-    @ResponseBody
-    @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public RestError handleException(EntityNotFoundException e) {
-        RestError error = new RestError(RestError.ErrorCode.NOT_FOUND);
-        if (e.getMessage() != null) {
-            error.setMessage(e.getMessage() + " not found");
         }
         return error;
     }

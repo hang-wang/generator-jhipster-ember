@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,11 +36,11 @@ public class BootstrapDataPopulator implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        createGroups();
-        createRootUserAccount();
+        log.info("Default user groups created [{}]", createGroups());
+        log.info("ROOT user created [{}]", createRootUserAccount());
     }
 
-    private void createGroups() {
+    private List<String> createGroups() {
         Directory directory = client.getResource(application.getDefaultAccountStore().getHref(), Directory.class);
 
         List<String> groups = Lists.newArrayList(directory.getGroups().iterator())
@@ -52,17 +53,20 @@ public class BootstrapDataPopulator implements InitializingBean {
                 directory.createGroup(g);
             }
         }
+
+        return groups;
     }
 
-    private void createRootUserAccount() {
-        //Check if exists
-        User u = userRepository.findOne(ROOT_ACCOUNT_USERNAME);
-
-        if (u == null) {
-            u = new User(ROOT_ACCOUNT_USERNAME, "Marissa", "Koala", ROOT_ACCOUNT_USERNAME);
-            u.setPassword(ROOT_ACCOUNT_PASSWORD);
-            u.setGroups(Lists.newArrayList(DEFAULT_GROUPS));
-            userRepository.save(u);
-        }
+    private User createRootUserAccount() {
+        return Optional.of(userRepository.findOne(ROOT_ACCOUNT_USERNAME))
+                .orElse(new User(user -> {
+                    user.setFirstName("Marissa");
+                    user.setLastName("Koala");
+                    user.setEmail(ROOT_ACCOUNT_USERNAME);
+                    user.setUsername(ROOT_ACCOUNT_USERNAME);
+                    user.setPassword(ROOT_ACCOUNT_PASSWORD);
+                    user.setGroups(Lists.newArrayList(DEFAULT_GROUPS));
+                    userRepository.save(user);
+                }));
     }
 }
