@@ -21,6 +21,7 @@ public class UserPasswordEncoderListener extends AbstractMongoEventListener<User
         if(source.getEncodePassword()) {
             source.setPassword(passwordEncoder.encode(source.getPassword()));
             source.setPasswordConfirm(source.getPassword());
+            source.setEncodePassword(false);
         }
     }
 }

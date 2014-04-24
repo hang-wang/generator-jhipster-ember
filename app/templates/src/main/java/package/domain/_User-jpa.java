@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -62,11 +63,8 @@ public class User extends Base implements Resource<UUID>, UserDetails {
     public User() {
     }
 
-    public User(String username, String firstName, String lastName, String email) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+    public User(Consumer<User> with) {
+        with.accept(this);
     }
 
     @JsonIgnore
@@ -110,6 +108,7 @@ public class User extends Base implements Resource<UUID>, UserDetails {
         if (encodePassword) {
             this.password = new BCryptPasswordEncoder().encode(this.password);
             this.passwordConfirm = this.password;
+            this.encodePassword = false;
         }
     }
 

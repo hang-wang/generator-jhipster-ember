@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;<% if (storage == 
 import org.springframework.context.annotation.DependsOn;<% } %>
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  *
  */
@@ -26,20 +28,20 @@ public class BootstrapDataPopulator implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        createRootUserAccount();
+        log.info("ROOT user created {}", createRootUserAccount());
     }
 
-    private void createRootUserAccount() {
-        //Check if exists
-        User u = userRepository.findByUsername(ROOT_ACCOUNT_USERNAME);
-
-        if (u == null) {
-            u = new User(ROOT_ACCOUNT_USERNAME, "Marissa", "Koala", ROOT_ACCOUNT_USERNAME);
-            u.setPassword(ROOT_ACCOUNT_PASSWORD);
-            u.setPasswordConfirm(ROOT_ACCOUNT_PASSWORD);
-            u.setEncodePassword(true);
-            u.setGroups(Lists.newArrayList(DEFAULT_GROUPS));
-            userRepository.save(u);
-        }
+    private User createRootUserAccount() {
+        return userRepository.save(Optional.of(userRepository.findByUsername(ROOT_ACCOUNT_USERNAME))
+                .orElse(new User(user -> {
+                    user.setFirstName("Marissa");
+                    user.setLastName("Koala");
+                    user.setEmail(ROOT_ACCOUNT_USERNAME);
+                    user.setUsername(ROOT_ACCOUNT_USERNAME);
+                    user.setPassword(ROOT_ACCOUNT_PASSWORD);
+                    user.setPasswordConfirm(ROOT_ACCOUNT_PASSWORD);
+                    user.setEncodePassword(true);
+                    user.setGroups(Lists.newArrayList(DEFAULT_GROUPS));
+                })));
     }
 }

@@ -63,8 +63,8 @@ public class UserDeserializer extends JsonDeserializer<User> {
 
         String password = nullCheck(userDataNode.get("password"), JsonNode::asText);
         if (password != null) {
-            u.setPassword(password);
-            u.setEncodePassword(true);
+            u.setPassword(password);<% if (stormpath == 'no') { %>
+            u.setEncodePassword(true);<% } %>
             if (userDataNode.get("passwordConfirm") != null) {
                 u.setPasswordConfirm(nullCheck(userDataNode.get("passwordConfirm"), JsonNode::asText));
             }
