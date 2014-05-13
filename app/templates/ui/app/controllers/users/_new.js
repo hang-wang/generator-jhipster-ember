@@ -4,7 +4,7 @@ var UsersNewController = Ember.ObjectController.extend(ValidationMixin, {
   actions: {
     create: function(model) {
       var self = this;
-      model.save().then(function(model) {
+      model.save().then(function() {
         self.handleSuccess('User created successfully');
         self.transitionTo('users');
       }).catch(function(err) {

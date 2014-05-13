@@ -306,16 +306,14 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(uiDir + 'bowerrc', uiDir + '.bowerrc');
     this.copy(uiDir + 'gitignore', uiDir + '.gitignore');
     this.copy(uiDir + 'jshintrc', uiDir + '.jshintrc');
+    this.copy(uiDir + 'testem.json', uiDir + 'testem.json');
 
     this.template(uiDir + '_Brocfile.js', uiDir + 'Brocfile.js');
     this.template(uiDir + '_bower.json', uiDir + 'bower.json');
     this.template(uiDir + '_package.json', uiDir + 'package.json');
     //Vendor folder UI files
     this.copy(uiDir + 'vendor/_loader.js', uiDir + 'vendor/_loader.js');
-    this.copy(uiDir + 'vendor/ember-shim.js', uiDir + 'vendor/ember-shim.js');
-    this.copy(uiDir + 'vendor/qunit-shim.js', uiDir + 'vendor/qunit-shim.js');
     //Tests folder UI files
-    this.copy(uiDir + 'tests/jshintrc', uiDir + 'tests/jshintrc');
     this.copy(uiDir + 'tests/test-helper.js', uiDir + 'tests/test-helper.js');
     this.copy(uiDir + 'tests/test-loader.js', uiDir + 'tests/test-loader.js');
     this.template(uiDir + 'tests/_index.html', uiDir + 'tests/index.html');
@@ -328,7 +326,6 @@ JhipsterGenerator.prototype.app = function app() {
     //Config folder UI files
     this.copy(uiDir + 'config/environment.js', uiDir + 'config/environment.js');
     //App folder UI fils
-    this.copy(uiDir + 'app/main.js', uiDir + 'app/main.js');
     this.copy(uiDir + 'app/router.js', uiDir + 'app/router.js');
     this.template(uiDir + 'app/_index.html', uiDir + 'app/index.html');
     this.template(uiDir + 'app/_app.js', uiDir + 'app/app.js');
@@ -357,8 +354,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.directory(uiDir + 'app/components', uiDir + 'app/components');
     this.directory(uiDir + 'app/adapters', uiDir + 'app/adapters');
     this.copy(uiDir + 'app/serializers/application.js', uiDir + 'app/serializers/application.js');
-    //api-stub filder UI files
-    this.directory(uiDir + 'api-stub', uiDir + 'api-stub');
   } else {
     removefolder(uiDir);
   }

@@ -1,6 +1,8 @@
-var Router = require('ui/router')['default'];
+/* global require */
 
-function startApp(attrs) {
+var Application = require('<%= _.underscored(baseName) %>/app')['default'];
+
+export default function startApp(attrs) {
   var App;
 
   var attributes = Ember.merge({
@@ -10,12 +12,8 @@ function startApp(attrs) {
     LOG_VIEW_LOOKUPS: false
   }, attrs); // but you can override;
 
-  Router.reopen({
-    location: 'none'
-  });
-
   Ember.run(function(){
-    App = require('<%= _.underscored(baseName) %>/main')['default']('<%= _.underscored(baseName) %>', attributes);
+    App = Application.create(attributes);
     App.setupForTesting();
     App.injectTestHelpers();
   });
@@ -25,4 +23,3 @@ function startApp(attrs) {
   return App;
 }
 
-export default startApp;
