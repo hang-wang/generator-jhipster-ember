@@ -9,11 +9,13 @@
     "DS": true,
     "$": true,
     "ENV": true,
-    "module": true
+    "module": true,
+    "Bootstrap": true,
+    "Handlebars": true
   },
-  "node" : false,
-  "browser" : false,
-  "boss" : true,
+  "node": false,
+  "browser": false,
+  "boss": true,
   "curly": false,
   "debug": false,
   "devel": false,
@@ -35,5 +37,7 @@
   "strict": false,
   "white": false,
   "eqnull": true,
-  "esnext": true
+  "esnext": true,
+  "unused": true
 }
+

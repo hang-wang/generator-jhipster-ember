@@ -32,7 +32,7 @@ public class BootstrapDataPopulator implements InitializingBean {
     }
 
     private User createRootUserAccount() {
-        return userRepository.save(Optional.of(userRepository.findByUsername(ROOT_ACCOUNT_USERNAME))
+        return userRepository.save(Optional.ofNullable(userRepository.findByUsername(ROOT_ACCOUNT_USERNAME))
                 .orElse(new User(user -> {
                     user.setFirstName("Marissa");
                     user.setLastName("Koala");
