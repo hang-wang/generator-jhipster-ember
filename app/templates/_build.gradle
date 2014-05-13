@@ -6,7 +6,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.0.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE")
     }
 }
 
@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-    newrelic("com.newrelic.agent.java:newrelic-agent:3.5.1")
+    newrelic("com.newrelic.agent.java:newrelic-agent:3.6.0")
 <% if (apiOnly == 'no') { %>
     compile project(':ui')<% } %>
     compile("com.codahale.metrics:metrics-graphite:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")
