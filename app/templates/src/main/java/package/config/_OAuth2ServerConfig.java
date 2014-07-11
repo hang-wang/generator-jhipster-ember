@@ -27,6 +27,8 @@ import org.springframework.security.oauth2.provider.error.DefaultOAuth2Exception
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.token.*;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.web.client.RestTemplate;
 <% if (storage == 'postgres') { %>
 import javax.sql.DataSource;<% } %>
