@@ -1,0 +1,14 @@
+web:
+  build: .
+  links:
+   - "redis:redis"<% if (storage == 'postgres') { %>
+   - "postgresql:postgresql"<% } %><% if (storage == 'mongo') { %>
+   - "mongodb:mongodb"<% } %>
+  ports:
+   - "9990:9990"<% if (storage == 'postgres') { %>
+postgresql:
+  image: jarias/postgresql<% } %><% if (storage == 'mongo') { %>
+mongodb:
+  image: jarias/mongodb<% } %>
+redis:
+  image: dockerfile/redis

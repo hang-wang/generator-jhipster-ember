@@ -10,7 +10,10 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
   yeoman.generators.Base.apply(this, arguments);
 
   this.on('end', function() {
-    this.spawnCommand('./gradlew', ['idea', 'clean', 'build']);
+    var self = this;
+    this.spawnCommand('./gradlew', ['idea', 'clean', 'build'], function() {
+      self.spawnCommand('git', 'init');
+    });
   });
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
@@ -103,6 +106,9 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy('gradlew', 'gradlew');
   this.copy('gradlew.bat', 'gradlew.bat');
   this.directory('gradle', 'gradle');
+  this.template("_fig.yml", 'fig.yml');
+  this.template("_Dockerfile", 'Dockerfile');
+  this.copy("run.sh", "run.sh");
 
   var packageFolder = this.packageName.replace(/\./g, '/');
   this.template('_build.gradle', 'build.gradle');

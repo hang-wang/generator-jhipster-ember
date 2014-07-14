@@ -1,0 +1,15 @@
+FROM jarias/java8
+<% if (storage == 'postgres') { %>
+ENV DATABASE_URL postgres://docker:docker@postgresql:5432/docker<% } %><% if (storage == 'mongo') { %>
+ENV SPRING_DATA_MONGODB_URI mongodb://mongodb/<%= _.underscored(baseName) %><% } %>
+ENV SPRINT_REDIS_HOST redis
+
+WORKDIR /app
+ADD . /app
+
+RUN ./gradlew clean build
+
+CMD []
+ENTRYPOINT ["/app/run.sh"]
+
+EXPOSE 9990
