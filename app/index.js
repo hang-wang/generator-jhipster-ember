@@ -9,11 +9,9 @@ shelljs = require('shelljs');
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
 
-  this.on('end', function() {
-    var self = this;
-    this.spawnCommand('./gradlew', ['idea', 'clean', 'build'], function() {
-      self.spawnCommand('git', 'init');
-    });
+  this.on('end', function() {    
+    this.spawnCommand('./gradlew', ['idea', 'clean', 'build']);
+    this.spawnCommand('git', ['init']);
   });
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
