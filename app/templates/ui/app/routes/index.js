@@ -1,3 +1,4 @@
-var IndexRoute = Ember.Route.extend(Ember.SimpleAuth.AuthenticatedRouteMixin);
+import Ember from 'ember';
+import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';
 
-export default IndexRoute;
+export default Ember.Route.extend(AuthenticatedRouteMixin);

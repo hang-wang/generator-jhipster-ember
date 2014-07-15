@@ -24,17 +24,12 @@ jar {
     }
 }
 
-task bowerInstall(type: NodeTask, dependsOn: "npmInstall") {
-    script = file("node_modules/bower/bin/bower")
-    args = ["install"]
-}
-
-task emberBuild(type: NodeTask, dependsOn: "bowerInstall") {
+task emberBuild(type: NodeTask, dependsOn: "npmInstall") {
     script = file("node_modules/ember-cli/bin/ember")
-    args = ["build", "production"]
+    args = ["build", "--production"]
 }
 
-task emberServer(type: NodeTask, dependsOn: "bowerInstall") {
+task emberServer(type: NodeTask, dependsOn: "npmInstall") {
     script = file("node_modules/ember-cli/bin/ember")
     args = ["server", "--proxy", "http://localhost:9990"]
 }

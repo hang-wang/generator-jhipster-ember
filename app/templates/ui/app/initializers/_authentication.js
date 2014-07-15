@@ -1,11 +1,14 @@
-var CustomAuthenticator = Ember.SimpleAuth.Authenticators.OAuth2.extend({
+import Ember from 'ember';
+import OAuth2 from 'simple-auth-oauth2/authenticators/oauth2';
+
+var CustomAuthenticator = OAuth2.extend({
 	authenticate: function (credentials) {
 		return new Ember.RSVP.Promise(function (resolve, reject) {
 			credentials.identification = credentials.identification.trim();
 			credentials.password = credentials.password.trim();
 
 			Ember.$.ajax({
-				url: ENV.api_token_endpoint,
+				url: 'oauth/token',
 				type: 'POST',
 				headers: {"Authorization": "Basic d2ViOg=="},
 				data: {
@@ -32,28 +35,10 @@ var CustomAuthenticator = Ember.SimpleAuth.Authenticators.OAuth2.extend({
 	}
 });
 
-var AuthInitializer = {
+export default {
 	name: 'authentication',
-	initialize: function (container, application) {
-		var options = {
-			routeAfterInvalidation: "/login"
-		};
-
-		Ember.SimpleAuth.Session.reopen({
-			currentUser: function() {
-				var id = this.get('id');
-
-				if (!Ember.isEmpty(id)) {
-					return container.lookup('store:main').find('user', id);
-				}
-			}.property('id')
-		});
-
-		container.register('authenticators:custom', CustomAuthenticator);
-
-		Ember.SimpleAuth.setup(container, application, options);
+  	before: 'simple-auth',
+	initialize: function (container) {
+		container.register('authenticator:custom', CustomAuthenticator);   
 	}
 };
-
-export default AuthInitializer;
-

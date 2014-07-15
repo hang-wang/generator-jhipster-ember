@@ -1,6 +1,7 @@
-import PaginationMixin from '<%= _.underscored(baseName) %>/mixins/pagination';
+import Ember from 'ember';
+import PaginationMixin from '<%= _.dasherize(baseName) %>/mixins/pagination';
 
-var UsersIndexController = Ember.ArrayController.extend(PaginationMixin, {
+export default Ember.ArrayController.extend(PaginationMixin, {
   modelType: 'user',
   actions: {
     delete: function(model) {
@@ -15,5 +16,3 @@ var UsersIndexController = Ember.ArrayController.extend(PaginationMixin, {
     }
   }
 });
-
-export default UsersIndexController;

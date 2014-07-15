@@ -1,5 +1,7 @@
+import Ember from 'ember';
+
 var Router = Ember.Router.extend({
-  location: ENV.locationType
+  location: <%= _.classify(baseName) %>ENV.locationType
 });
 
 Router.map(function() {
@@ -16,4 +18,3 @@ Router.map(function() {
 });
 
 export default Router;
-

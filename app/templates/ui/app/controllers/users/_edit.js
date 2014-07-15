@@ -1,6 +1,7 @@
-import ValidationMixin from 'jhipster_ember/mixins/validation';
+import Ember from 'ember';
+import ValidationMixin from '<%= _.dasherize(baseName) %>/mixins/validation';
 
-var UsersEditController = Ember.ObjectController.extend(ValidationMixin, {
+export default Ember.ObjectController.extend(ValidationMixin, {
   actions: {
     update: function(model) {
       var self = this;
@@ -20,6 +21,3 @@ var UsersEditController = Ember.ObjectController.extend(ValidationMixin, {
     }
   }
 });
-
-export default UsersEditController;
-

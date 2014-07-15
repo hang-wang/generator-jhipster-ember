@@ -1,5 +1,15 @@
-var ApplicationController = Ember.ObjectController.extend({
+import Ember from 'ember';
+
+export default Ember.ObjectController.extend({
   error: '',
+
+  currentUser: function() {
+    var id = this.get('session.id');
+
+    if (!Ember.isEmpty(id)) {
+      return this.get('store').find('user', id);
+    }
+  }.property('session.id'),
 
   hasError: function() {
     return this.get('error').toString().length > 0;
@@ -27,5 +37,3 @@ var ApplicationController = Ember.ObjectController.extend({
     }
   }.property('session.roles')
 });
-
-export default ApplicationController;

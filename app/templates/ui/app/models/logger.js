@@ -1,4 +1,6 @@
-var Logger = DS.Model.extend({
+import DS from 'ember-data';
+
+export default DS.Model.extend({
     level: DS.attr('string'),
     isTraceLvl: function() {
         return this.get('level') === 'TRACE';
@@ -16,5 +18,3 @@ var Logger = DS.Model.extend({
         return this.get('level') === 'INFO';
     }.property('level')
 });
-
-export default Logger;

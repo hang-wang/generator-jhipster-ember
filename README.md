@@ -15,6 +15,7 @@ This fork brings the following changes or differences:
 * Security via OAuth2 using Spring Security
 * [Stormpath](http://stormpath.com) as an optional authorization service
 * Heroku deployment ready
+* Docker ready
 
 #Installation
 
@@ -28,8 +29,12 @@ Install JHipster Ember:
 
 #Requirements
 
-* PostgreSQL or MongoDB
+* PostgreSQL or MongoDB (optional if using docker)
 * [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* [Docker](http://docker.com/) (optional)
+* [Fig](http://orchardup.github.io/fig/) (optional)
+* [Direnv](http://direnv.net/) (optional but usefull if using Docker)
+* [Boot2docker](https://github.com/boot2docker/boot2docker-cli) (is using Docker on OS X)
 
 If you want to use [Stormpath](http://stormpath.com)
 
@@ -45,6 +50,14 @@ If you want to use [Stormpath](http://stormpath.com)
 
 To run the generated application
 
+Storage service can be started using Docker and Fig
+
+For example:
+
+```> fig up -d postgresql```
+
+Then start the app:
+
 ```> ./gradlew bootRun```
 
 On a different terminal session run the UI with livereload and all the good stuff (provided by [ember-cli](https://github.com/stefanpenner/ember-cli))
@@ -54,6 +67,8 @@ On a different terminal session run the UI with livereload and all the good stuf
 Yes a full gradle workflow!!
 
 Goto http://localhost:4200/ login with marisssa@koala.test/123Queso@
+
+If you want to run the app fully dockerized just do ```> fig up```
 
 #TODO
 

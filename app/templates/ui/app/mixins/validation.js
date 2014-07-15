@@ -1,4 +1,6 @@
-var ValidationMixin = Ember.Mixin.create({
+import Ember from 'ember';
+
+export default Ember.Mixin.create({
   needs: ['application'],
   clearError: function() {
     this.set('controllers.application.error', '');
@@ -17,8 +19,6 @@ var ValidationMixin = Ember.Mixin.create({
     error.detailMessages.forEach(function(message) {
       messageList.push('<li>' + message + '</li>');
     });
-    this.set('controllers.application.error', new Handlebars.SafeString(mainMessage + "<ul>" + messageList.join('') + "</ul>"));
+    this.set('controllers.application.error', new Ember.Handlebars.SafeString(mainMessage + "<ul>" + messageList.join('') + "</ul>"));
   }
 });
-
-export default ValidationMixin;
