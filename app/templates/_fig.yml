@@ -5,7 +5,7 @@ web:
    - "postgresql:postgresql"<% } %><% if (storage == 'mongo') { %>
    - "mongodb:mongodb"<% } %>
   ports:
-   - "9990:9990"<% if (storage == 'postgres') { %>
+   - "0.0.0.0:9990:9990"<% if (storage == 'postgres') { %>
 postgresql:
   image: jarias/postgresql
   ports:
