@@ -10,6 +10,7 @@ buildscript {
 apply plugin: "idea"
 apply plugin: "java"
 apply plugin: "spring-boot"
+apply plugin: 'project-report'
 
 configurations {
     newrelic
@@ -36,46 +37,47 @@ repositories {
 }
 
 dependencies {
-    newrelic("com.newrelic.agent.java:newrelic-agent:3.8.0")
+    versionManagement 'io.spring.platform:platform-versions:1.0.1.RELEASE@properties'
+
+    newrelic("com.newrelic.agent.java:newrelic-agent:3.8.1")
 <% if (apiOnly == 'no') { %>
     compile project(':ui')<% } %>
-    compile("com.codahale.metrics:metrics-graphite:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")
-    compile("com.codahale.metrics:metrics-jvm:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")
-    compile("com.codahale.metrics:metrics-servlet:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")
-    compile("com.codahale.metrics:metrics-servlets:<%= _.unescape('\$\{codahaleMetricsVersion}')%>")
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-hppc:<%= _.unescape('\$\{jacksonVersion}')%>")
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:<%= _.unescape('\$\{jacksonVersion}')%>")<% if (storage == 'postgres') { %>
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:<%= _.unescape('\$\{jacksonVersion}')%>")<% } %>
+    compile("com.codahale.metrics:metrics-graphite")
+    compile("com.codahale.metrics:metrics-jvm")
+    compile("com.codahale.metrics:metrics-servlets")
+    compile("com.codahale.metrics:metrics-servlet:3.0.2")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")<% if (storage == 'postgres') { %>
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-hibernate4")<% } %>
     compile("com.ryantenney.metrics:metrics-spring:3.0.0")
-    compile("com.zaxxer:HikariCP:1.4.0")
-    compile("commons-lang:commons-lang:2.6")
-    compile("commons-io:commons-io:2.4")
-    compile("javax.inject:javax.inject:1")
-    compile("org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:1.8.3")<% if (storage == 'postgres') { %>
+    compile("com.zaxxer:HikariCP")
+    compile("commons-lang:commons-lang")
+    compile("commons-io:commons-io")
+    compile("javax.inject:javax.inject")
+    compile("com.sun.mail:javax.mail")
+    compile("javax.mail:javax.mail-api")<% if (storage == 'postgres') { %>
     compile("org.jadira.usertype:usertype.core:3.1.0.GA")
     compile("org.jadira.usertype:usertype.extended:3.1.0.GA")
     compile("org.liquibase:liquibase-core:3.1.1")<% } %>
-    compile("org.hibernate:hibernate-validator:5.1.0.Final")
-    compile("org.springframework.boot:spring-boot-starter-web:<%= _.unescape('\$\{springBootVersion}')%>")
-    compile("org.springframework.boot:spring-boot-starter-actuator:<%= _.unescape('\$\{springBootVersion}')%>")
-    compile("org.springframework.boot:spring-boot-starter-security:<%= _.unescape('\$\{springBootVersion}')%>")<% if (storage == 'postgres') { %>
-    compile("org.springframework.boot:spring-boot-starter-data-jpa:<%= _.unescape('\$\{springBootVersion}')%>")<% } %><% if (storage == 'mongo') { %>
-    compile("org.springframework.boot:spring-boot-starter-data-mongodb:<%= _.unescape('\$\{springBootVersion}')%>")<% } %>
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf:<%= _.unescape('\$\{springBootVersion}')%>")    
-    compile("org.springframework:spring-context-support:4.0.6.RELEASE")
-    compile("org.springframework.security:spring-security-core:3.2.4.RELEASE")
-    compile("org.springframework.security:spring-security-web:3.2.4.RELEASE")
-    compile("org.springframework.security:spring-security-config:3.2.4.RELEASE")
-    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.2.RELEASE")
-    compile("org.springframework.security:spring-security-jwt:1.0.2.RELEASE")
-    compile("org.springframework.data:spring-data-redis:1.3.1.RELEASE")
-    compile("redis.clients:jedis:2.4.1")<% if (stormpath == 'yes') { %>
+    compile("org.hibernate:hibernate-validator")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-security")<% if (storage == 'postgres') { %>
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")<% } %><% if (storage == 'mongo') { %>
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")<% } %>
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-redis")
+    compile("org.springframework:spring-context-support")
+    compile("org.springframework.security:spring-security-core")
+    compile("org.springframework.security:spring-security-web")
+    compile("org.springframework.security:spring-security-config")
+    compile("org.springframework.security.oauth:spring-security-oauth2")
+    compile("org.springframework.security:spring-security-jwt")<% if (stormpath == 'yes') { %>
     compile("com.stormpath.spring.security:stormpath-spring-security-core:0.2.0")
     compile("com.stormpath.sdk:stormpath-sdk-httpclient:1.0.RC2")<% } %>
     compile("org.projectlombok:lombok:1.14.2")
     compile("org.tuckey:urlrewritefilter:4.0.4")
     compile("org.atteo:evo-inflector:1.2")
-    compile("com.google.guava:guava:17.0")
+    compile("com.google.guava:guava")
     compile("de.malkusch.validation:validation:0.2.1")<% if (storage == 'postgres') { %>
 
     // Database dependencies
@@ -84,8 +86,5 @@ dependencies {
     runtime("com.mattbertolini:liquibase-slf4j:1.2.1")
 <% } %>
     // Test dependencies
-    testCompile("com.jayway.awaitility:awaitility:1.4.0")
-    testCompile("com.jayway.jsonpath:json-path:0.9.1")
-    testCompile("org.springframework.boot:spring-boot-starter-test:<%= _.unescape('\$\{springBootVersion}')%>")
-    testCompile("org.assertj:assertj-core:1.5.0")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
