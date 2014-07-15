@@ -1,3 +1,4 @@
-export DATABASE_URL=postgres://docker:docker@`boot2docker ip`:5432/docker
-export SPRING_DATA_MONGODB_URI=mongodb://`boot2docker ip`/<%= _.underscored(baseName) %>
-export SPRINT_REDIS_HOST=`boot2docker ip`
+export B2D_IP=`boot2docker ip`<% if (storage == 'postgres') { %>
+export DATABASE_URL=postgres://docker:docker@$B2D_IP:5432/docker<% } %><% if (storage == 'mongo') { %>
+export SPRING_DATA_MONGODB_URI=mongodb://$B2D_IP/<%= _.underscored(baseName) %><% } %>
+export SPRINT_REDIS_HOST=$B2D_IP
