@@ -1,4 +1,6 @@
-var User = DS.Model.extend({
+import DS from 'ember-data';
+
+export default DS.Model.extend({
   firstName: DS.attr('string'),
   lastName: DS.attr('string'),
   email: DS.attr('string'),
@@ -32,5 +34,3 @@ var User = DS.Model.extend({
     return this.get('groups').contains('ADMIN');
   }.property('groups')
 });
-
-export default User;

@@ -1,4 +1,6 @@
-var PaginationMixin = Ember.Mixin.create({
+import Ember from 'ember';
+
+export default Ember.Mixin.create({
   actions: {
       nextPage: function () {
           if (!this.get('isLastPage')) {
@@ -40,5 +42,3 @@ var PaginationMixin = Ember.Mixin.create({
     }
   }.property('meta.lastPage')
 });
-
-export default PaginationMixin;

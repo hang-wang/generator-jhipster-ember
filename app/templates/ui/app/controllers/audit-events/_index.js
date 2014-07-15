@@ -1,7 +1,6 @@
-import PaginationMixin from '<%= _.underscored(baseName) %>/mixins/pagination';
+import Ember from 'ember';
+import PaginationMixin from '<%= _.dasherize(baseName) %>/mixins/pagination';
 
-var AuditEventsIndexController = Ember.ArrayController.extend(PaginationMixin, {
+export default Ember.ArrayController.extend(PaginationMixin, {
     modelType: 'auditEvent'
 });
-
-export default AuditEventsIndexController;

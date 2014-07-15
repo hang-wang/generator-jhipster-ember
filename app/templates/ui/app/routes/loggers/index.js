@@ -1,4 +1,7 @@
-var LoggersIndexRoute = Ember.Route.extend(Ember.SimpleAuth.AuthenticatedRouteMixin, {
+import Ember from 'ember';
+import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';
+
+export default Ember.Route.extend(AuthenticatedRouteMixin, {
     setupController: function (controller) {
         var self = this;
         this.get('store').find('logger', {page: 0}).then(function (model) {
@@ -7,5 +10,3 @@ var LoggersIndexRoute = Ember.Route.extend(Ember.SimpleAuth.AuthenticatedRouteMi
         });
     }
 });
-
-export default LoggersIndexRoute;

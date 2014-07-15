@@ -1,6 +1,7 @@
-import ValidationMixin from '<%= _.underscored(baseName) %>/mixins/validation';
+import Ember from 'ember';
+import ValidationMixin from '<%= _.dasherize(baseName) %>/mixins/validation';
 
-var UsersNewController = Ember.ObjectController.extend(ValidationMixin, {
+export default Ember.ObjectController.extend(ValidationMixin, {
   actions: {
     create: function(model) {
       var self = this;
@@ -20,5 +21,3 @@ var UsersNewController = Ember.ObjectController.extend(ValidationMixin, {
     }
   }
 });
-
-export default UsersNewController;
