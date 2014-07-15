@@ -7,8 +7,15 @@ web:
   ports:
    - "9990:9990"<% if (storage == 'postgres') { %>
 postgresql:
-  image: jarias/postgresql<% } %><% if (storage == 'mongo') { %>
+  image: jarias/postgresql
+  ports:
+  - "0.0.0.0:5432:5432"<% } %><% if (storage == 'mongo') { %>
 mongodb:
-  image: jarias/mongodb<% } %>
+  image: jarias/mongodb
+  ports:
+  - "0.0.0.0:27017:27017"
+  - "0.0.0.0:28017:28017"<% } %>
 redis:
   image: dockerfile/redis
+  ports:
+  - "0.0.0.0:6379:6379"

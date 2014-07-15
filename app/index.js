@@ -90,6 +90,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.storage = props.storage;
         this.apiOnly = props.apiOnly;
         this.stormpath = props.stormpath;
+        this.platform = process.platform;
         cb();
     }.bind(this));
 };
@@ -316,8 +317,8 @@ JhipsterGenerator.prototype.app = function app() {
         removefile(uiDir + 'config/environment.js');
         this.copy(uiDir + 'config/environment.js', uiDir + 'config/environment.js');
         removefile(uiDir + 'Brocfile.js');
-        this.copy(uiDir + 'Brocfile.js', uiDir + 'Brocfile.js');        
-         
+        this.copy(uiDir + 'Brocfile.js', uiDir + 'Brocfile.js');
+
         //Public folder UI files
         this.directory(uiDir + 'public/fonts', uiDir + 'public/fonts');
         this.copy(uiDir + 'public/images/logo.png', uiDir + 'public/images/logo.png');
@@ -348,7 +349,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(uiDir + 'app/controllers/users/_edit.js', uiDir + 'app/controllers/users/edit.js');
         this.template(uiDir + 'app/controllers/users/_new.js', uiDir + 'app/controllers/users/new.js');
         this.template(uiDir + 'app/controllers/loggers/_index.js', uiDir + 'app/controllers/loggers/index.js');
-        this.template(uiDir + 'app/controllers/audit-events/_index.js', uiDir + 'app/controllers/audit-events/index.js');        
+        this.template(uiDir + 'app/controllers/audit-events/_index.js', uiDir + 'app/controllers/audit-events/index.js');
         this.copy(uiDir + 'app/adapters/application.js', uiDir + 'app/adapters/application.js');
         this.copy(uiDir + 'app/serializers/application.js', uiDir + 'app/serializers/application.js');
     } else {
@@ -361,6 +362,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('packageFolder', packageFolder);
     this.config.set('apiOnly', this.apiOnly);
     this.config.set('stormpath', this.stormpath);
+    this.config.set('platform', process.platform);
 };
 
 function removefile(file) {
