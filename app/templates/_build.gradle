@@ -39,7 +39,7 @@ repositories {
 dependencies {
     versionManagement 'io.spring.platform:platform-versions:1.0.1.RELEASE@properties'
 
-    newrelic("com.newrelic.agent.java:newrelic-agent:3.9.0")
+    newrelic("com.newrelic.agent.java:newrelic-agent:3.10.0")
 <% if (apiOnly == 'no') { %>
     compile project(':ui')<% } %>
     compile("com.codahale.metrics:metrics-graphite")
