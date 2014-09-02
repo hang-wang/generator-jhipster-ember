@@ -109,7 +109,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template("_fig.yml", 'fig.yml');
     this.template("_Dockerfile", 'Dockerfile');
     this.template("_envrc", '.envrc');
-    this.copy("run.sh", "run.sh");
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     this.template('_build.gradle', 'build.gradle');

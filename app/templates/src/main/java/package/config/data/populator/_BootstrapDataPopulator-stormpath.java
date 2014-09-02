@@ -25,7 +25,9 @@ public class BootstrapDataPopulator implements InitializingBean {
 
     private static final String ROOT_ACCOUNT_USERNAME = "marissa@koala.test";
     private static final String ROOT_ACCOUNT_PASSWORD = "123Queso@";
-    private static final String[] DEFAULT_GROUPS = {"ADMIN", "USER", "ROOT"};
+    private static final String SSH_ROOT_ACCOUNT_USERNAME = "sshadmin";
+    private static final String[] DEFAULT_GROUPS = {"ADMIN", "USER", "ROOT", "SSH"};
+    private static final String[] ROOT_ADMIN_GROUPS = {"ADMIN", "USER", "ROOT", "SSH"};
 
     @Autowired
     private UserRepository userRepository;
@@ -38,6 +40,7 @@ public class BootstrapDataPopulator implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         log.info("Default user groups created [{}]", createGroups());
         log.info("ROOT user created [{}]", createRootUserAccount());
+        log.info("SSH user created [{}]", createRootSSHUserAccount());
     }
 
     private List<String> createGroups() {
@@ -57,6 +60,20 @@ public class BootstrapDataPopulator implements InitializingBean {
         return groups;
     }
 
+    private User createRootSSHUserAccount() {
+        return userRepository.save(Optional.ofNullable(userRepository.findOne(SSH_ROOT_ACCOUNT_USERNAME))
+                .orElse(new User(user -> {
+                    user.setFirstName("SSH");
+                    user.setLastName("ADMIN");
+                    user.setEmail(SSH_ROOT_ACCOUNT_USERNAME);
+                    user.setUsername(SSH_ROOT_ACCOUNT_USERNAME);
+                    user.setPassword(ROOT_ACCOUNT_PASSWORD);
+                    user.setPasswordConfirm(ROOT_ACCOUNT_PASSWORD);
+                    user.setEncodePassword(true);
+                    user.setGroups(Lists.newArrayList("SSH"));
+                })));
+    }
+
     private User createRootUserAccount() {
         return userRepository.save(Optional.ofNullable(userRepository.findOne(ROOT_ACCOUNT_USERNAME))
                 .orElse(new User(user -> {
@@ -65,7 +82,7 @@ public class BootstrapDataPopulator implements InitializingBean {
                     user.setEmail(ROOT_ACCOUNT_USERNAME);
                     user.setUsername(ROOT_ACCOUNT_USERNAME);
                     user.setPassword(ROOT_ACCOUNT_PASSWORD);
-                    user.setGroups(Lists.newArrayList(DEFAULT_GROUPS));
+                    user.setGroups(Lists.newArrayList(ROOT_ADMIN_GROUPS));
                 })));
     }
 }

@@ -1,21 +1,32 @@
 web:
   build: .
   links:
-   - "redis:redis"<% if (storage == 'postgres') { %>
-   - "postgresql:postgresql"<% } %><% if (storage == 'mongo') { %>
-   - "mongodb:mongodb"<% } %>
+   - redis:redis<% if (storage == 'postgres') { %>
+   - postgresql:postgresql<% } %><% if (storage == 'mongo') { %>
+   - mongodb:mongodb<% } %>
   ports:
-   - "0.0.0.0:9990:9990"<% if (storage == 'postgres') { %>
+   - "0.0.0.0:9990:9990"
+   - "0.0.0.0:2000:2000"<% if (storage == 'postgres') { %>
 postgresql:
   image: jarias/postgresql
   ports:
-  - "0.0.0.0:5432:5432"<% } %><% if (storage == 'mongo') { %>
+  - "0.0.0.0:5432:5432"
+  volumes:
+  - /postgresql
+  environment:
+    DB_USERNAME: <%= _.underscored(baseName) %>
+    DB_USERNAME_PASSWORD: <%= _.underscored(baseName) %>
+    DB_NAME: <%= _.underscored(baseName) %><% } %><% if (storage == 'mongo') { %>
 mongodb:
   image: jarias/mongodb
+  volumes:
+  - /data
   ports:
   - "0.0.0.0:27017:27017"
   - "0.0.0.0:28017:28017"<% } %>
 redis:
-  image: dockerfile/redis
+  image: jarias/redis
+  volumes:
+  - /data
   ports:
   - "0.0.0.0:6379:6379"
