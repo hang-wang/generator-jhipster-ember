@@ -23,6 +23,14 @@ Install Yeoman:
 
 ```> npm install -g yo```
 
+Install Ember CLI:
+
+```> npm install -g ember-cli```
+
+Install Bower:
+
+```> npm install -g bower```
+
 Install JHipster Ember:
 
 ```> npm install -g generator-jhipster-ember```
