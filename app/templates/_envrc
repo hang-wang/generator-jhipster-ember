@@ -1,4 +1,3 @@
-<% if (platform == 'darwin') { %>export SERVICES_IP=`boot2docker ip`<% } else { %>export SERVICES_IP=127.0.0.1<% } %><% if (storage == 'postgres') { %>
-export DATABASE_URL=postgres://docker:docker@$SERVICES_IP:5432/docker<% } %><% if (storage == 'mongo') { %>
-export SPRING_DATA_MONGODB_URI=mongodb://$SERVICES_IP/<%= _.underscored(baseName) %><% } %>
-export SPRINT_REDIS_HOST=$SERVICES_IP
+<% if (storage == 'postgres') { %>export DATABASE_URL=postgres://<%= _.underscored(baseName) %>:<%= _.underscored(baseName) %>@postgresql.docker:5432/<%= _.underscored(baseName) %><% } %><% if (storage == 'mongo') { %>
+export SPRING_DATA_MONGODB_URI=mongodb://mongo.docker/<%= _.underscored(baseName) %><% } %>
+export SPRINT_REDIS_HOST=redis.docker

@@ -20,6 +20,7 @@ import java.util.Optional;
 public class BootstrapDataPopulator implements InitializingBean {
 
     private static final String ROOT_ACCOUNT_USERNAME = "marissa@koala.test";
+    private static final String SSH_ROOT_ACCOUNT_USERNAME = "sshadmin";
     private static final String ROOT_ACCOUNT_PASSWORD = "123Queso@";
     private static final String[] DEFAULT_GROUPS = {"ADMIN", "USER", "ROOT"};
 
@@ -28,7 +29,22 @@ public class BootstrapDataPopulator implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("ROOT user created {}", createRootUserAccount());
+        log.info("ROOT user created [{}]", createRootUserAccount());
+        log.info("SSH user created [{}]", createRootSSHUserAccount());
+    }
+
+    private User createRootSSHUserAccount() {
+        return userRepository.save(Optional.ofNullable(userRepository.findByUsername(SSH_ROOT_ACCOUNT_USERNAME))
+                .orElse(new User(user -> {
+                    user.setFirstName("SSH");
+                    user.setLastName("ADMIN");
+                    user.setEmail(SSH_ROOT_ACCOUNT_USERNAME);
+                    user.setUsername(SSH_ROOT_ACCOUNT_USERNAME);
+                    user.setPassword(ROOT_ACCOUNT_PASSWORD);
+                    user.setPasswordConfirm(ROOT_ACCOUNT_PASSWORD);
+                    user.setEncodePassword(true);
+                    user.setGroups(Lists.newArrayList("SSH"));
+                })));
     }
 
     private User createRootUserAccount() {

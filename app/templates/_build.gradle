@@ -39,7 +39,7 @@ repositories {
 dependencies {
     versionManagement 'io.spring.platform:platform-versions:1.0.1.RELEASE@properties'
 
-    newrelic("com.newrelic.agent.java:newrelic-agent:3.8.1")
+    newrelic("com.newrelic.agent.java:newrelic-agent:3.10.0")
 <% if (apiOnly == 'no') { %>
     compile project(':ui')<% } %>
     compile("com.codahale.metrics:metrics-graphite")
@@ -51,7 +51,6 @@ dependencies {
     compile("com.ryantenney.metrics:metrics-spring:3.0.0")
     compile("com.zaxxer:HikariCP")
     compile("commons-lang:commons-lang")
-    compile("commons-io:commons-io")
     compile("javax.inject:javax.inject")
     compile("com.sun.mail:javax.mail")
     compile("javax.mail:javax.mail-api")<% if (storage == 'postgres') { %>
@@ -66,6 +65,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")<% } %>
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-redis")
+    compile("org.springframework.boot:spring-boot-starter-remote-shell")
     compile("org.springframework:spring-context-support")
     compile("org.springframework.security:spring-security-core")
     compile("org.springframework.security:spring-security-web")
@@ -74,14 +74,14 @@ dependencies {
     compile("org.springframework.security:spring-security-jwt")<% if (stormpath == 'yes') { %>
     compile("com.stormpath.spring.security:stormpath-spring-security-core:0.2.0")
     compile("com.stormpath.sdk:stormpath-sdk-httpclient:1.0.RC2")<% } %>
-    compile("org.projectlombok:lombok:1.14.2")
+    compile("org.projectlombok:lombok:1.14.4")
     compile("org.tuckey:urlrewritefilter:4.0.4")
     compile("org.atteo:evo-inflector:1.2")
     compile("com.google.guava:guava")
     compile("de.malkusch.validation:validation:0.2.1")<% if (storage == 'postgres') { %>
 
     // Database dependencies
-    compile("org.postgresql:postgresql:9.3-1101-jdbc41")
+    compile("org.postgresql:postgresql:9.3-1102-jdbc41")
 
     runtime("com.mattbertolini:liquibase-slf4j:1.2.1")
 <% } %>
