@@ -11,22 +11,16 @@ postgresql:
   image: jarias/postgresql
   ports:
   - "0.0.0.0:5432:5432"
-  volumes:
-  - /postgresql
   environment:
     DB_USERNAME: <%= _.underscored(baseName) %>
     DB_USERNAME_PASSWORD: <%= _.underscored(baseName) %>
     DB_NAME: <%= _.underscored(baseName) %><% } %><% if (storage == 'mongo') { %>
 mongodb:
-  image: jarias/mongodb
-  volumes:
-  - /data
+  image: mongo
   ports:
   - "0.0.0.0:27017:27017"
   - "0.0.0.0:28017:28017"<% } %>
 redis:
-  image: jarias/redis
-  volumes:
-  - /data
+  image: redis
   ports:
   - "0.0.0.0:6379:6379"

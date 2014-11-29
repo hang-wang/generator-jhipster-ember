@@ -35,7 +35,7 @@
             <column name="audit_event_id" type="UUID"/>
         </createIndex>
     </changeSet>
-<% if (stormpath == 'no') { %>
+<% if (!stormpath) { %>
     <changeSet id="2" author="jhipster">
         <createTable tableName="users">
             <column name="id" type="UUID">

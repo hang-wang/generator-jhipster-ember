@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ValidationMixin from '<%= _.dasherize(baseName) %>/mixins/validation';
+import ValidationMixin from 'ui/mixins/validation';
 
 export default Ember.ObjectController.extend(ValidationMixin, {
   actions: {

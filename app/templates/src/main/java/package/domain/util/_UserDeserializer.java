@@ -7,12 +7,12 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
-import org.apache.commons.lang.StringUtils;<% if (storage == 'mongo' && stormpath == 'no') { %>
+import org.apache.commons.lang.StringUtils;<% if (storage == 'mongo' && !stormpath) { %>
 import org.bson.types.ObjectId;<% } %>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;<% if (storage == 'postgres' && stormpath == 'no') { %>
+import java.io.IOException;<% if (storage == 'postgres' && !stormpath) { %>
 import java.util.UUID;<% } %>
 import java.util.function.Function;
 
@@ -31,9 +31,9 @@ public class UserDeserializer extends JsonDeserializer<User> {
 
         User u = new User();
 
-        if (userDataNode.get("id") != null && StringUtils.isNotBlank(nullCheck(userDataNode.get("id"), JsonNode::asText))) {<% if (storage == 'postgres' && stormpath == 'no') { %>
-            u = userRepository.findOne(UUID.fromString(userDataNode.get("id").asText()));<% } %><%if (storage == 'mongo' && stormpath == 'no') { %>
-            u = userRepository.findOne(new ObjectId(userDataNode.get("id").asText()));<% } %><% if (stormpath == 'yes') { %>
+        if (userDataNode.get("id") != null && StringUtils.isNotBlank(nullCheck(userDataNode.get("id"), JsonNode::asText))) {<% if (storage == 'postgres' && !stormpath) { %>
+            u = userRepository.findOne(UUID.fromString(userDataNode.get("id").asText()));<% } %><%if (storage == 'mongo' && !stormpath) { %>
+            u = userRepository.findOne(new ObjectId(userDataNode.get("id").asText()));<% } %><% if (stormpath) { %>
             u = userRepository.findOne(userDataNode.get("id").asText());<% } %>
         }
 
@@ -63,7 +63,7 @@ public class UserDeserializer extends JsonDeserializer<User> {
 
         String password = nullCheck(userDataNode.get("password"), JsonNode::asText);
         if (password != null) {
-            u.setPassword(password);<% if (stormpath == 'no') { %>
+            u.setPassword(password);<% if (!stormpath) { %>
             u.setEncodePassword(true);<% } %>
             if (userDataNode.get("passwordConfirm") != null) {
                 u.setPasswordConfirm(nullCheck(userDataNode.get("passwordConfirm"), JsonNode::asText));

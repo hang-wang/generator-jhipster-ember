@@ -45,7 +45,7 @@ public class AuditConfiguration {
                 auditEvent.setAuditEventType(event.getType());
                 Instant instant = Instant.ofEpochMilli(event.getTimestamp().getTime());
                 auditEvent.setAuditEventDate(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()));
-                auditEvent.setData(auditEventConverter.convertDataToStrings(event.getData()));
+                auditEvent.setExtraData(auditEventConverter.convertDataToStrings(event.getData()));
 
                 persistenceAuditEventRepository.save(auditEvent);
             }

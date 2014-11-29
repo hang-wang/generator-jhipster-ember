@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import PaginationMixin from '<%= _.dasherize(baseName) %>/mixins/pagination';
+import PaginationMixin from 'ui/mixins/pagination';
 
 export default Ember.ArrayController.extend(PaginationMixin, {
     modelType: 'auditEvent'

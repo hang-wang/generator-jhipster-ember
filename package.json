@@ -1,53 +1,47 @@
 {
-    "name": "generator-jhipster-ember",
-    "version": "1.0.0-beta.7",
-    "description": "Java + Spring + JPA + EmberJS complete dev stack",
-    "keywords": [
-        "yeoman-generator",
-        "Java",
-        "Spring",
-        "Spring Security",
-        "JPA",
-        "Hibernate",
-        "EmberJS",
-        "Twitter Bootstrap",
-        "Gradle"
-    ],
-    "homepage": "",
-    "bugs": "https://github.com/jarias/generator-jhipster-ember/issues",
-    "author": {
-        "name": "Julio Arias (initial work: Julien Dubois)",
-        "email": "",
-        "url": "https://github.com/jarias"
-    },
-    "main": "app/index.js",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/jarias/generator-jhipster-ember.git"
-    },
-    "scripts": {
-        "test": "mocha"
-    },
-    "dependencies": {
-        "chalk": "~0.4.0",
-        "cheerio": "~0.13.0",
-        "shelljs": "~0.2.6",
-        "spawn-sync": "0.0.2",
-        "underscore.string": "~2.3.3",
-        "yeoman-generator": "~0.16.0",
-        "ember-cli": "~0.0.39"
-    },
-    "devDependencies": {
-        "mocha": "~1.17.0"
-    },
-    "peerDependencies": {
-        "yo": ">=1.0.0"
-    },
-    "engines": {
-        "node": ">=0.10.0",
-        "npm": ">=1.2.10"
-    },
-    "licenses": [{
-        "type": "Apache 2.0"
-    }]
+  "name": "generator-jhipster-ember",
+  "version": "1.0.0-beta.8",
+  "description": "Java + Spring + JPA + EmberJS complete dev stack",
+  "license": "Apache 2.0",
+  "main": "app\/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git:\/\/github.com\/jarias\/generator-jhipster-ember.git"
+  },
+  "author": {
+    "name": "Julio Arias (initial work: Julien Dubois)",
+    "email": "jarias01@gmail.com",
+    "url": "https:\/\/github.com\/jarias"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "app"
+  ],
+  "keywords": [
+    "yeoman-generator",
+    "Java",
+    "Spring",
+    "Spring Security",
+    "JPA",
+    "Hibernate",
+    "EmberJS",
+    "Twitter Bootstrap",
+    "Gradle"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^0.17.0",
+    "chalk": "^0.5.0",
+    "yosay": "^0.3.0"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "peerDependencies": {
+    "yo": ">=1.0.0"
+  }
 }

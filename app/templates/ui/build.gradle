@@ -1,14 +1,7 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath("com.moowork.gradle:gradle-node-plugin:0.5")
-    }
+plugins {
+    id "java"
+    id "com.moowork.node" version "0.8"
 }
-
-apply plugin: "java"
-apply plugin: "node"
 
 node {
     version = "0.10.26"
@@ -24,12 +17,22 @@ jar {
     }
 }
 
-task emberBuild(type: NodeTask, dependsOn: "npmInstall") {
+task emberSimpleAuth(type: NodeTask) {
+    script = file("node_modules/ember-cli/bin/ember")
+    args = ["generate", "ember-cli-simple-auth", "ember-cli-simple-auth-oauth2"]
+}
+
+task bowerInstall(type: NodeTask, dependsOn: "npmInstall") {
+    script = file("node_modules/bower/bin/bower")
+    args = ["install"]
+}
+
+task emberBuild(type: NodeTask, dependsOn: ["bowerInstall", "emberSimpleAuth"]) {
     script = file("node_modules/ember-cli/bin/ember")
     args = ["build", "--production"]
 }
 
-task emberServer(type: NodeTask, dependsOn: "npmInstall") {
+task emberServer(type: NodeTask, dependsOn: ["bowerInstall", "emberSimpleAuth"]) {
     script = file("node_modules/ember-cli/bin/ember")
     args = ["server", "--proxy", "http://localhost:9990"]
 }

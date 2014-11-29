@@ -18,7 +18,7 @@ export default Ember.Mixin.create({
         modelType = this.get('modelType');
     this.get('store').find(modelType, {page: pageNumber}).then(function (model) {
       self.set('model', model);
-      self.set('meta', Ember.copy(self.get('store').metadataFor(modelType)));
+      self.set('meta', model.meta);
     });
   },
   currentPage: function () {
