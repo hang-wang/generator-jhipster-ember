@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }<% if (stormpath === 'no') { %>
+    }<% if (!stormpath) { %>
 
     @Bean
     public PasswordEncoder passwordEncoder() {

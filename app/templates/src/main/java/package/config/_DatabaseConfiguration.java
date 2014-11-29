@@ -35,23 +35,6 @@ public class DatabaseConfiguration {
         return new HikariDataSource(parseDatabaseUrl(databaseUrl));
     }
 
-    @Bean(name = {"org.springframework.boot.autoconfigure.AutoConfigurationUtils.basePackages"})
-    public List<String> getBasePackages() {
-        List<String> basePackages = new ArrayList<>();
-        basePackages.add("<%=packageName%>.domain");
-        return basePackages;
-    }
-
-    @Bean
-    public SpringLiquibase liquibase() throws Exception {
-        log.debug("Configuring Liquibase");
-        SpringLiquibase liquibase = new SpringLiquibase();
-        liquibase.setDataSource(dataSource());
-        liquibase.setChangeLog("classpath:config/liquibase/db-changelog.xml");
-        liquibase.setContexts("development, production");
-        return liquibase;
-    }
-
     private HikariConfig parseDatabaseUrl(String url) throws Exception {
         URI dbUri = new URI(url);
         String username = "";

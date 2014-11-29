@@ -16,12 +16,12 @@ var app = new EmberApp();
 // modules that you would like to import into your application
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
-app.import('vendor/ember-addons.bs_for_ember/dist/js/bs-core.max.js');
-app.import('vendor/ember-addons.bs_for_ember/dist/js/bs-notifications.max.js');
-app.import('vendor/ember-addons.bs_for_ember/dist/js/bs-alert.max.js');
-app.import('vendor/ember-addons.bs_for_ember/dist/js/bs-button.max.js');
-app.import('vendor/ember-addons.bs_for_ember/dist/js/bs-modal.max.js');
-app.import('vendor/bootstrap/js/modal.js');
-app.import('vendor/bootstrap/js/dropdown.js');
+app.import('bower_components/ember-addons.bs_for_ember/dist/js/bs-core.max.js');
+app.import('bower_components/ember-addons.bs_for_ember/dist/js/bs-notifications.max.js');
+app.import('bower_components/ember-addons.bs_for_ember/dist/js/bs-alert.max.js');
+app.import('bower_components/ember-addons.bs_for_ember/dist/js/bs-button.max.js');
+app.import('bower_components/ember-addons.bs_for_ember/dist/js/bs-modal.max.js');
+app.import('bower_components/bootstrap/js/modal.js');
+app.import('bower_components/bootstrap/js/dropdown.js');
 
 module.exports = app.toTree();

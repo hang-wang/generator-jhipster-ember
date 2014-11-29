@@ -27,7 +27,7 @@ public class AuditEventConverter {
         for (AuditEvent persistentAuditEvent : persistentAuditEvents) {
             Instant instant = persistentAuditEvent.getAuditEventDate().atZone(ZoneId.systemDefault()).toInstant();
             org.springframework.boot.actuate.audit.AuditEvent auditEvent = new org.springframework.boot.actuate.audit.AuditEvent(Date.from(instant), persistentAuditEvent.getPrincipal(),
-                    persistentAuditEvent.getAuditEventType(), convertDataToObjects(persistentAuditEvent.getData()));
+                    persistentAuditEvent.getAuditEventType(), convertDataToObjects(persistentAuditEvent.getExtraData()));
             auditEvents.add(auditEvent);
         }
 

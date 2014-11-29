@@ -37,7 +37,7 @@ public class AuditEvent extends Base implements Resource<UUID> {
     @MapKeyColumn(name = "name")
     @Column(name = "value")
     @CollectionTable(name = "audit_event_data", joinColumns = @JoinColumn(name = "audit_event_id"))
-    private Map<String, String> data = new HashMap<>();
+    private Map<String, String> extraData = new HashMap<>();
 
     @Data
     public static class AuditEventWrapper implements EntityWrapper<AuditEvent> {

@@ -48,14 +48,11 @@ public class OAuth2ServerConfig  {
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
         @Autowired
-        private DefaultTokenServices tokenServices;
-
-        @Autowired
         private OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
 
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) {
-            resources.resourceId(RESOURCE_ID).tokenServices(tokenServices);
+            resources.resourceId(RESOURCE_ID);
         }
 
         @Override
@@ -111,7 +108,7 @@ public class OAuth2ServerConfig  {
         }
 
         @Bean
-        public DefaultTokenServices tokenServices() {
+        public AuthorizationServerTokenServices tokenServices() {
             final DefaultTokenServices tokenServices = new DefaultTokenServices();
 
             TokenEnhancerChain accessTokenEnhancer = new TokenEnhancerChain();

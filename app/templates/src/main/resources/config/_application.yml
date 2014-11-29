@@ -31,6 +31,9 @@ spring:
     messageSource:
         cacheSeconds: 1
 
+liquibase:
+    changeLog: classpath:/config/liquibase/db-changelog.xml
+
 jwt:
    token:
       signing-key: |

@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - '0.10'
+before_install:
+  - currentfolder=${PWD##*/}
+  - if [ "$currentfolder" != 'generator-jhipster-ember' ]; then cd .. && eval "mv $currentfolder generator-jhipster-ember" && cd generator-jhipster-ember; fi
+

@@ -1,5 +1,5 @@
 package <%=packageName%>.security;
-<% if (stormpath === 'no') { %>
+<% if (!stormpath) { %>
 import <%=packageName%>.domain.User;<% } %>
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +22,8 @@ public class CustomTokenEnhancer implements TokenEnhancer {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         DefaultOAuth2AccessToken result = new DefaultOAuth2AccessToken(accessToken);
         Map<String, Object> info = new HashMap<>();
-        info.put("username", userDetails.getUsername());<% if (stormpath === 'no') { %>
-        info.put("id", ((User) userDetails).getId());<% } %><% if (stormpath === 'yes') { %>
+        info.put("username", userDetails.getUsername());<% if (!stormpath) { %>
+        info.put("id", ((User) userDetails).getId());<% } %><% if (stormpath) { %>
         info.put("id", userDetails.getUsername());<% } %>
         Set<String> roles = userDetails.getAuthorities().stream().filter(grantedAuthority -> !grantedAuthority.getAuthority().startsWith("http")).map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
         info.put("roles", roles);
