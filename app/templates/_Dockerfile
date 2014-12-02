@@ -5,9 +5,10 @@ ENV SPRING_DATA_MONGODB_URI mongodb://mongodb/<%= _.underscored(baseName) %><% }
 ENV SPRINT_REDIS_HOST redis
 
 WORKDIR /app
+ADD build/libs/<%= _.slugify(baseName) %>.jar /app/<%= _.slugify(baseName) %>.jar
 
-CMD []
-ENTRYPOINT ["java", "-jar", "build/libs/jhipster-ember-1.0.0.jar"]
+CMD ["-jar", "/app/<%= _.slugify(baseName) %>.jar"]
+ENTRYPOINT ["java", "-server", "-Xms512m", "-Xmx1024m"]
 
 EXPOSE 9990
 EXPOSE 2000

@@ -7,8 +7,10 @@ web:
   ports:
    - "0.0.0.0:9990:9990"
    - "0.0.0.0:2000:2000"<% if (storage == 'postgres') { %>
+  working_dir: /src
   volumes:
-   - .:/app
+    - .:/src
+  command: -jar build/libs/<%= _.slugify(baseName) %>.jar
 postgresql:
   image: jarias/postgresql
   ports:

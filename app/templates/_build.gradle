@@ -21,6 +21,7 @@ configurations {
 
 jar {
     baseName = "<%= _.slugify(baseName) %>"
+    archiveName = "<%= _.slugify(baseName) %>.jar"
 }
 
 springBoot {
