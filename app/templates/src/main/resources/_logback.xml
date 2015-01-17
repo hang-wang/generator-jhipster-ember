@@ -5,7 +5,6 @@
 
     <logger name="<%=packageName%>" level="<%= _.unescape('\$\{logback.loglevel}')%>"/>
     <logger name="ch.qos.logback" level="WARN"/>
-    <logger name="com.codahale.metrics" level="WARN"/>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
     <logger name="org.apache" level="WARN"/>

@@ -65,7 +65,6 @@ public class OAuth2ServerConfig  {
                     .antMatchers("/beans").access("#oauth2.denyOAuthClient() and hasRole('USER,ADMIN') or #oauth2.hasScope('read')")
                     .antMatchers("/metrics").access("#oauth2.denyOAuthClient() and hasRole('USER,ADMIN') or #oauth2.hasScope('read')")
                     .antMatchers("/shutdown").access("#oauth2.denyOAuthClient() and hasRole('USER,ADMIN') or #oauth2.hasScope('read')")
-                    .antMatchers("/metrics/**").access("#oauth2.denyOAuthClient() and hasRole('USER,ADMIN') or #oauth2.hasScope('read')")
                     .antMatchers("/api/v1/loggers/**").access("#oauth2.denyOAuthClient() and hasRole('USER,ADMIN,ROOT') or #oauth2.hasScope('read_write')")
                     .antMatchers("/api/v1/auditEvents/**").access("#oauth2.denyOAuthClient() and hasRole('USER,ADMIN,ROOT') or #oauth2.hasScope('read_write')")
                     .antMatchers("/api/v1/**").access("#oauth2.denyOAuthClient() and hasRole('USER') or #oauth2.hasScope('read_write')")
@@ -94,9 +93,9 @@ public class OAuth2ServerConfig  {
         @Autowired
         private MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
 
-        @Value("<%= _.unescape('\$\{jwt.token.signing-key}')%>")
+        @Value("<%= _.unescape('\$\{jwt.token.signingKey}')%>")
         private String jwtTokenSigningKey;
-        @Value("<%= _.unescape('\$\{jwt.token.verification-key}')%>")
+        @Value("<%= _.unescape('\$\{jwt.token.verificationKey}')%>")
         private String jwtTokenVerificationKey;
 
         @Override

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class MailService {
     private Environment env;
 
     @Inject
-    private JavaMailSenderImpl javaMailSender;
+    private JavaMailSender javaMailSender;
 
     /**
      * System default email address that sends the e-mails.

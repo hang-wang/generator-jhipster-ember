@@ -24,8 +24,8 @@ public class CustomPageSerializer extends JsonSerializer<CustomPage> {
         jgen.writeNumberField("totalPages", value.getPage().getTotalPages());
         jgen.writeNumberField("numberOfElements", value.getPage().getNumberOfElements());
         jgen.writeNumberField("totalElements", value.getPage().getTotalElements());
-        jgen.writeBooleanField("firstPage", value.getPage().isFirstPage());
-        jgen.writeBooleanField("lastPage", value.getPage().isLastPage());
+        jgen.writeBooleanField("firstPage", value.getPage().isFirst());
+        jgen.writeBooleanField("lastPage", value.getPage().isLast());
         jgen.writeEndObject();
 
         jgen.writeEndObject();

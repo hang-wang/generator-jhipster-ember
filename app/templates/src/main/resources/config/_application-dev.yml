@@ -25,9 +25,6 @@ database:
     dataSourceClassName: org.postgresql.ds.PGSimpleDataSource
     url: postgres://<%= _.underscored(baseName) %>:<%= _.underscored(baseName) %>@<%= docker ? 'postgresql.docker' : 'localhost' %>:5432/<%= _.underscored(baseName) %><% } %>
 
-metrics:
-    jmx.enabled: true
-
 stormpath:
   app:
     name: <%=baseName%>-dev

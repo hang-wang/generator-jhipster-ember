@@ -22,11 +22,9 @@ spring:
     mail:
         host: localhost
         port: 25
-        user:
+        username:
         password:
-        protocol: smtp
-        tls: false
-        auth: false
+        from:
 
     messageSource:
         cacheSeconds: 1
@@ -36,7 +34,7 @@ liquibase:
 
 jwt:
    token:
-      signing-key: |
+      signingKey: |
           -----BEGIN RSA PRIVATE KEY-----
           MIIEpQIBAAKCAQEAv2nKXhuby1LTvgroRd8ah+jM4k6Qq6w1VsS7SRS24Hgkb7cG
           qsqg8l6GjpXiuEdLpVNEpkhQ4Tgs8UH889LwcAsPsAqNSY6ZnNIAbie3yTC1qb9P
@@ -64,4 +62,4 @@ jwt:
           +gmQ6kxXnHoYq8HGZlrvdFBIY7X9oMGuq5v6jD6NhsFkmId7+7g5c9PXECGqPeVj
           VZYBgf9O1tuWuqNVohEMLkH5/WPJyl+0xJpOiihJToxa0b7l4TUuY7s=
           -----END RSA PRIVATE KEY-----
-      verification-key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/acpeG5vLUtO+CuhF3xqH6MziTpCrrDVWxLtJFLbgeCRvtwaqyqDyXoaOleK4R0ulU0SmSFDhOCzxQfzz0vBwCw+wCo1Jjpmc0gBuJ7fJMLWpv0+iKBkP58BdAWKYsPgi8UJFEx+tynoY0WLmm3ydvFoe1pJ76VEQU0kFTFHtTsI2tTpOq5+mVKRMdZQ2dhIXFi1Hn+lHuCemRt172gO8E1G0FbB/4ZzQ3bYrcS2QUV0lImcz3MilUWtMgVFvufRp5M+MIznuIC6hwMWJaBBMN2P2LFKISGrIp1jT9Xfasx9vPZ9Y9R6WEPzurj65oYBBlUzWlYKqgz6Nl903cTaf jhipster
+      verificationKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/acpeG5vLUtO+CuhF3xqH6MziTpCrrDVWxLtJFLbgeCRvtwaqyqDyXoaOleK4R0ulU0SmSFDhOCzxQfzz0vBwCw+wCo1Jjpmc0gBuJ7fJMLWpv0+iKBkP58BdAWKYsPgi8UJFEx+tynoY0WLmm3ydvFoe1pJ76VEQU0kFTFHtTsI2tTpOq5+mVKRMdZQ2dhIXFi1Hn+lHuCemRt172gO8E1G0FbB/4ZzQ3bYrcS2QUV0lImcz3MilUWtMgVFvufRp5M+MIznuIC6hwMWJaBBMN2P2LFKISGrIp1jT9Xfasx9vPZ9Y9R6WEPzurj65oYBBlUzWlYKqgz6Nl903cTaf jhipster

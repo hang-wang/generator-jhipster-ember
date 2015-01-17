@@ -1,10 +1,5 @@
 package <%=packageName%>.config;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.health.HealthCheckRegistry;
-import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.HealthCheckServlet;
-import com.codahale.metrics.servlets.MetricsServlet;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;<% if (storage == 'mongo') { %>
@@ -46,12 +41,6 @@ public class WebConfigurer implements ServletContextInitializer {
 
     @Autowired
     private Environment env;
-
-    @Autowired
-    private MetricRegistry metricRegistry;
-
-    @Autowired
-    private HealthCheckRegistry healthCheckRegistry;
 
     @Autowired
     private UserDeserializer userDeserializer;
@@ -102,12 +91,12 @@ public class WebConfigurer implements ServletContextInitializer {
         });
         return factory;
     }
+
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
 
-        initMetrics(servletContext, disps);
         initUrlRewriteProductionFilter(servletContext, disps);
         initCachingHttpHeadersFilter(servletContext, disps);
         initGzipFilter(servletContext, disps);
@@ -131,7 +120,7 @@ public class WebConfigurer implements ServletContextInitializer {
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.html");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.js");
         compressingFilter.addMappingForUrlPatterns(disps, true, "/api/v1/*");
-        compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics");
         compressingFilter.addMappingForUrlPatterns(disps, true, "/info");
 
         compressingFilter.setAsyncSupported(true);
@@ -142,9 +131,9 @@ public class WebConfigurer implements ServletContextInitializer {
 
         FilterRegistration.Dynamic urlRewriteFilter = servletContext.addFilter("urlRewriteFilter", new UrlRewriteFilter());
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            urlRewriteFilter.setInitParameter("confPath", "urlrewrite-prod.xml");
+            urlRewriteFilter.setInitParameter("confPath", "/urlrewrite-prod.xml");
         } else {
-            urlRewriteFilter.setInitParameter("confPath", "urlrewrite.xml");
+            urlRewriteFilter.setInitParameter("confPath", "/urlrewrite.xml");
         }
 
         urlRewriteFilter.addMappingForUrlPatterns(disps, true, "/*");
@@ -166,41 +155,5 @@ public class WebConfigurer implements ServletContextInitializer {
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "*.css");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "*.js");
         cachingHttpHeadersFilter.setAsyncSupported(true);
-    }
-
-    /**
-     * Initializes Metrics.
-     */
-    private void initMetrics(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-        log.debug("Initializing Metrics registries");
-        servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,
-                metricRegistry);
-        servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
-                metricRegistry);
-        servletContext.setAttribute(HealthCheckServlet.HEALTH_CHECK_REGISTRY,
-                healthCheckRegistry);
-
-        log.debug("Registering Metrics Filter");
-        FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
-                new InstrumentedFilter());
-
-        metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
-        metricsFilter.setAsyncSupported(true);
-
-        log.debug("Registering Metrics Servlet");
-        ServletRegistration.Dynamic metricsAdminServlet =
-                servletContext.addServlet("metricsServlet", new MetricsServlet());
-
-        metricsAdminServlet.addMapping("/metrics/*");
-        metricsAdminServlet.setAsyncSupported(true);
-        metricsAdminServlet.setLoadOnStartup(2);
-
-        log.debug("Registering HealthCheck Servlet");
-        ServletRegistration.Dynamic healthCheckServlet =
-                servletContext.addServlet("healthCheckServlet", new HealthCheckServlet());
-
-        healthCheckServlet.addMapping("/health/*");
-        healthCheckServlet.setAsyncSupported(true);
-        healthCheckServlet.setLoadOnStartup(2);
     }
 }

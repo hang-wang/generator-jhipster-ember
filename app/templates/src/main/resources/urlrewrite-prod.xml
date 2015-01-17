@@ -14,7 +14,7 @@
         <condition type="request-uri" operator="notequal">^/trace$</condition>
         <condition type="request-uri" operator="notequal">^/dump$</condition>
         <condition type="request-uri" operator="notequal">^/shutdown$</condition>
-        <condition type="request-uri" operator="notequal">^/metrics/.*$</condition>
+        <condition type="request-uri" operator="notequal">^/metrics$</condition>
         <condition type="request-uri" operator="notequal">^/api/v1/.*$</condition>
         <condition type="request-uri" operator="notequal">^/oauth/.*$</condition>
         <condition type="request-uri" operator="notequal">^/assets/.*$</condition>

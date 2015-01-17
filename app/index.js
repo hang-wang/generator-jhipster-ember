@@ -82,20 +82,13 @@ var JhipsterEmberGenerator = yeoman.generators.Base.extend({
       this.template('src/main/java/package/_Application.java', javaRoot + 'Application.java');
 
       this.template('src/main/java/package/config/_package-info.java', javaRoot + 'config/package-info.java');
-      this.template('src/main/java/package/config/_AsyncConfiguration.java', javaRoot + 'config/AsyncConfiguration.java');
-      this.template('src/main/java/package/config/_CacheConfiguration.java', javaRoot + 'config/CacheConfiguration.java');
       this.template('src/main/java/package/config/_Constants.java', javaRoot + 'config/Constants.java');
 
       if (this.storage === 'postgres') {
         this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaRoot + 'config/DatabaseConfiguration.java');
-      } else {
-        this.template('src/main/java/package/config/_MongoConfiguration.java', javaRoot + 'config/MongoConfiguration.java');
       }
 
       this.template('src/main/java/package/config/_LocaleConfiguration.java', javaRoot + 'config/LocaleConfiguration.java');
-      this.template('src/main/java/package/config/_MailConfiguration.java', javaRoot + 'config/MailConfiguration.java');
-      this.template('src/main/java/package/config/_MetricsConfiguration.java', javaRoot + 'config/MetricsConfiguration.java');
-      this.template('src/main/java/package/config/_ThymeleafConfiguration.java', javaRoot + 'config/ThymeleafConfiguration.java');
       this.template('src/main/java/package/config/_WebConfigurer.java', javaRoot + 'config/WebConfigurer.java');
       this.template('src/main/java/package/config/_SecurityConfiguration.java', javaRoot + 'config/SecurityConfiguration.java');
       this.template('src/main/java/package/config/_OAuth2ServerConfig.java', javaRoot + 'config/OAuth2ServerConfig.java');
@@ -106,16 +99,6 @@ var JhipsterEmberGenerator = yeoman.generators.Base.extend({
 
       this.template('src/main/java/package/config/audit/_package-info.java', javaRoot + 'config/audit/package-info.java');
       this.template('src/main/java/package/config/audit/_AuditConfiguration.java', javaRoot + 'config/audit/AuditConfiguration.java');
-
-      this.template('src/main/java/package/config/metrics/_package-info.java', javaRoot + 'config/metrics/package-info.java');
-
-      if (this.storage === 'postgres') {
-        this.template('src/main/java/package/config/metrics/_DatabaseHealthCheck.java', javaRoot + 'config/metrics/DatabaseHealthCheck.java');
-      } else {
-        this.template('src/main/java/package/config/metrics/_DatabaseHealthCheck-mongo.java', javaRoot + 'config/metrics/DatabaseHealthCheck.java');
-      }
-
-      this.template('src/main/java/package/config/metrics/_JavaMailHealthCheck.java', javaRoot + 'config/metrics/JavaMailHealthCheck.java');
 
       if (this.stormpath) {
         this.template('src/main/java/package/config/data/populator/_BootstrapDataPopulator-stormpath.java', javaRoot + 'config/data/populator/BootstrapDataPopulator.java');
