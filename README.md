@@ -74,7 +74,7 @@ On a different terminal session run the UI with livereload and all the good stuf
 
 Yes a full gradle workflow!!
 
-Goto http://localhost:4200/ login with marisssa@koala.test/123Queso@
+Goto http://localhost:4200/ login with marissa@koala.test/123Queso@
 
 If you want to run the app fully dockerized just do ```> fig up```
 
