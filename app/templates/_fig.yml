@@ -6,11 +6,12 @@ web:
    - mongodb:mongodb<% } %>
   ports:
    - "0.0.0.0:9990:9990"
-   - "0.0.0.0:2000:2000"<% if (storage == 'postgres') { %>
+   - "0.0.0.0:2000:2000"
+   - "0.0.0.0:5005:5005"<% if (storage == 'postgres') { %>
   working_dir: /src
   volumes:
     - .:/src
-  command: -jar build/libs/<%= _.slugify(baseName) %>.jar
+  command: -jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 build/libs/<%= _.slugify(baseName) %>.jar
 postgresql:
   image: jarias/postgresql
   ports:
