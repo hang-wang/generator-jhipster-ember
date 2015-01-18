@@ -190,6 +190,7 @@ var JhipsterEmberGenerator = yeoman.generators.Base.extend({
 
       this.template('src/main/java/package/web/filter/_package-info.java', javaRoot + 'web/filter/package-info.java');
       this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaRoot + 'web/filter/CachingHttpHeadersFilter.java');
+      this.template('src/main/java/package/web/filter/_CustomUrlRewriteFilter.java', javaRoot + 'web/filter/CustomUrlRewriteFilter.java');
 
       this.template('src/main/java/package/web/rest/_package-info.java', javaRoot + 'web/rest/package-info.java');
 
@@ -222,9 +223,6 @@ var JhipsterEmberGenerator = yeoman.generators.Base.extend({
       this.src.copy('src/main/resources/i18n/messages_en.properties', 'src/main/resources/i18n/messages_en.properties');
       this.src.copy('src/main/resources/i18n/messages_fr.properties', 'src/main/resources/i18n/messages_fr.properties');
       this.src.copy('src/main/resources/i18n/messages_de.properties', 'src/main/resources/i18n/messages_de.properties');
-
-      // Thymeleaf templates
-      this.src.copy('src/main/resources/templates/error.html', 'src/main/resources/templates/error.html');
 
       this.template('src/main/resources/_logback.xml', 'src/main/resources/logback.xml');
       this.src.copy('src/main/resources/urlrewrite.xml', 'src/main/resources/urlrewrite.xml');

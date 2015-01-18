@@ -9,6 +9,7 @@ import <%=packageName%>.security.OAuth2ExceptionMixin;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.domain.util.UserDeserializer;
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
+import com.mycompany.myapp.web.filter.CustomUrlRewriteFilter;
 import lombok.extern.slf4j.Slf4j;<% if (storage == 'mongo') { %>
 import org.bson.types.ObjectId;<% } %>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
-import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 import org.tuckey.web.filters.urlrewrite.gzip.GzipFilter;
 
 import javax.servlet.*;
@@ -129,12 +129,14 @@ public class WebConfigurer implements ServletContextInitializer {
     private void initUrlRewriteProductionFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
         log.debug("Registering tuckey urlrewritefilter");
 
-        FilterRegistration.Dynamic urlRewriteFilter = servletContext.addFilter("urlRewriteFilter", new UrlRewriteFilter());
+        FilterRegistration.Dynamic urlRewriteFilter = servletContext.addFilter("urlRewriteFilter", new CustomUrlRewriteFilter());
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            urlRewriteFilter.setInitParameter("confPath", "/urlrewrite-prod.xml");
+            urlRewriteFilter.setInitParameter("confPath", "urlrewrite-prod.xml");
         } else {
-            urlRewriteFilter.setInitParameter("confPath", "/urlrewrite.xml");
+            urlRewriteFilter.setInitParameter("confPath", "urlrewrite.xml");
         }
+
+        urlRewriteFilter.setInitParameter("logLevel", "slf4j");
 
         urlRewriteFilter.addMappingForUrlPatterns(disps, true, "/*");
     }
