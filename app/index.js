@@ -320,12 +320,14 @@ var JhipsterEmberGenerator = yeoman.generators.Base.extend({
     },
 
     uiDeps: function () {
-      var done = this.async();
+      if (this.ui) {
+        var done = this.async();
 
-      this.spawnCommand('npm', ['install', '--save-dev', 'bower', 'ember-cli-less', 'ember-cli-simple-auth', 'ember-cli-simple-auth-oauth2'], {cwd: './ui'}).on('exit', function () {
-        this.spawnCommand('bower', ['install', 'bootstrap', 'ember-addons.bs_for_ember', '--save'], {cwd: './ui'});
-        done();
-      }.bind(this));
+        this.spawnCommand('npm', ['install', '--save-dev', 'bower', 'ember-cli-less', 'ember-cli-simple-auth', 'ember-cli-simple-auth-oauth2'], {cwd: './ui'}).on('exit', function () {
+          this.spawnCommand('bower', ['install', 'bootstrap', 'ember-addons.bs_for_ember', '--save'], {cwd: './ui'});
+          done();
+        }.bind(this));
+      }
     },
 
     end: function () {
