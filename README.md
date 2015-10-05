@@ -1,3 +1,7 @@
+#NO LONGER MAINTAIN
+
+I no longer maintain this project, actually I haven't done any work on it in long time
+
 #Jhipster Ember Generator
 
 [Yeoman](http://yeoman.io/) generator base on [JHipster](http://jhipster.github.io/) which describes itself as
